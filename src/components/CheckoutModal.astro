@@ -1,0 +1,732 @@
+---
+// CheckoutModal.astro — Modal Inteligente de Checkout & Pagamento com Simulação de Cartão e PIX
+---
+
+<div 
+  id="checkout-modal" 
+  class="fixed inset-0 z-[1000] bg-slate-900/80 backdrop-blur-md hidden flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
+>
+  <div class="bg-white rounded-3xl w-full max-w-2xl shadow-2xl overflow-hidden border border-slate-200 my-8 relative animate-reveal">
+    
+    <!-- Header do Modal -->
+    <div class="bg-[#124A6E] text-white px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-[#3DB5B4]/20 text-[#3DB5B4] flex items-center justify-center">
+          <span class="iconify w-5 h-5" data-icon="solar:shield-check-bold"></span>
+        </div>
+        <div>
+          <h3 class="text-base font-bold leading-tight">Checkout Seguro Documentalista</h3>
+          <p class="text-xs text-slate-300 font-mono-code">Finalização Instantânea da Consulta</p>
+        </div>
+      </div>
+
+      <button 
+        type="button" 
+        onclick="closeCheckoutModal()"
+        class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors focus:outline-none"
+        aria-label="Fechar Checkout"
+      >
+        <span class="iconify w-5 h-5" data-icon="solar:close-circle-bold"></span>
+      </button>
+    </div>
+
+    <!-- Indicator Bar de Etapas (Step Progress) -->
+    <div class="bg-slate-100 border-b border-slate-200 px-6 py-3">
+      <div class="flex items-center justify-between max-w-md mx-auto relative">
+        <div class="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-slate-300 z-0"></div>
+        <div id="checkout-progress-bar" class="absolute left-0 top-1/2 -translate-y-1/2 h-0.5 bg-[#3DB5B4] z-0 transition-all duration-300 w-0"></div>
+
+        <!-- Step 1 Dot -->
+        <div id="step-dot-1" class="relative z-10 w-8 h-8 rounded-full bg-[#3DB5B4] text-white font-mono-code font-bold text-xs flex items-center justify-center shadow-md">
+          1
+        </div>
+        <!-- Step 2 Dot -->
+        <div id="step-dot-2" class="relative z-10 w-8 h-8 rounded-full bg-slate-300 text-slate-600 font-mono-code font-bold text-xs flex items-center justify-center">
+          2
+        </div>
+        <!-- Step 3 Dot -->
+        <div id="step-dot-3" class="relative z-10 w-8 h-8 rounded-full bg-slate-300 text-slate-600 font-mono-code font-bold text-xs flex items-center justify-center">
+          3
+        </div>
+      </div>
+      
+      <div class="flex justify-between text-[11px] font-bold text-slate-500 max-w-md mx-auto mt-1">
+        <span id="step-label-1" class="text-[#3DB5B4]">1. Placa</span>
+        <span id="step-label-2">2. Identificação</span>
+        <span id="step-label-3">3. Pagamento</span>
+      </div>
+    </div>
+
+    <!-- CONTEÚDO DOS PASSOS DO CHECKOUT -->
+    <div class="p-6 sm:p-8 space-y-6">
+
+      <!-- ========================================== -->
+      <!-- ETAPA 1: NUMERAÇÃO DA PLACA DO VEÍCULO -->
+      <!-- ========================================== -->
+      <div id="checkout-step-1" class="space-y-5">
+        <div class="text-center max-w-md mx-auto">
+          <span class="text-xs font-mono-code text-[#3DB5B4] font-bold uppercase tracking-wider">Passo 1 de 3</span>
+          <h4 class="text-xl font-extrabold text-[#124A6E] mt-1">Informe a placa do veículo</h4>
+          <p class="text-xs text-slate-500 mt-1">Digite a placa para a qual você está realizando a consulta.</p>
+        </div>
+
+        <div class="max-w-xs mx-auto">
+          <div class="plate-input-container">
+            <div class="plate-header-mercosul">
+              <span>BRASIL</span>
+              <span class="iconify w-4 h-3" data-icon="flag:br-4x3"></span>
+            </div>
+            <div class="p-3 bg-white flex items-center">
+              <input 
+                type="text" 
+                id="checkout-plate-input" 
+                maxlength="8" 
+                placeholder="ABC1D23" 
+                class="w-full text-center text-3xl font-mono-code font-bold uppercase text-[#124A6E] tracking-widest focus:outline-none placeholder:text-slate-300"
+                oninput="formatCheckoutPlate(this)"
+              />
+            </div>
+          </div>
+          <p id="checkout-plate-error" class="hidden text-xs text-rose-600 font-semibold text-center mt-2">
+            Digite uma placa válida com 7 caracteres.
+          </p>
+        </div>
+
+        <button 
+          type="button" 
+          onclick="submitCheckoutStep1()"
+          class="w-full py-3.5 px-6 bg-[#3DB5B4] hover:bg-[#2ca1a0] text-white font-extrabold text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
+        >
+          <span>CONTINUAR PARA IDENTIFICAÇÃO</span>
+          <span class="iconify w-4 h-4" data-icon="solar:arrow-right-bold"></span>
+        </button>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- ETAPA 2: IDENTIFICAÇÃO (JÁ TEM CONTA OU CADASTRAR) -->
+      <!-- ========================================== -->
+      <div id="checkout-step-2" class="space-y-6 hidden">
+        <div class="text-center max-w-md mx-auto">
+          <span class="text-xs font-mono-code text-[#3DB5B4] font-bold uppercase tracking-wider">Passo 2 de 3</span>
+          <h4 class="text-xl font-extrabold text-[#124A6E] mt-1">Como você deseja se identificar?</h4>
+          <p class="text-xs text-slate-500 mt-1">Para vincular o relatório e enviar para seu e-mail.</p>
+        </div>
+
+        <!-- Botões de Seleção de Opção (Login / Cadastro) -->
+        <div class="grid grid-cols-2 gap-3 max-w-md mx-auto">
+          <button 
+            type="button" 
+            id="btn-tab-register"
+            onclick="switchAuthTab('register')"
+            class="py-3 px-4 rounded-xl font-bold text-xs border-2 border-[#3DB5B4] bg-[#3DB5B4]/10 text-[#124A6E] transition-all"
+          >
+            SOU NOVO CLIENTE (Criar Conta)
+          </button>
+          <button 
+            type="button" 
+            id="btn-tab-login"
+            onclick="switchAuthTab('login')"
+            class="py-3 px-4 rounded-xl font-bold text-xs border-2 border-slate-200 bg-white text-slate-600 hover:border-slate-300 transition-all"
+          >
+            JÁ TENHO CONTA (Fazer Login)
+          </button>
+        </div>
+
+        <!-- Form 1: CADASTRO -->
+        <form id="checkout-register-form" onsubmit="handleCheckoutRegister(event)" class="space-y-4 max-w-md mx-auto">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Nome Completo *</label>
+            <input 
+              type="text" 
+              id="reg-name" 
+              placeholder="Digite seu nome completo" 
+              required 
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-[#3DB5B4] focus:outline-none"
+            />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">E-mail *</label>
+              <input 
+                type="email" 
+                id="reg-email" 
+                placeholder="seu@email.com" 
+                required 
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-[#3DB5B4] focus:outline-none"
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">CPF *</label>
+              <input 
+                type="text" 
+                id="reg-cpf" 
+                placeholder="000.000.000-00" 
+                maxlength="14"
+                required 
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-[#3DB5B4] focus:outline-none font-mono-code"
+                oninput="formatCPF(this)"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">WhatsApp / Celular *</label>
+              <input 
+                type="text" 
+                id="reg-phone" 
+                placeholder="(00) 90000-0000" 
+                maxlength="15"
+                required 
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-[#3DB5B4] focus:outline-none font-mono-code"
+                oninput="formatPhone(this)"
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Criar Senha *</label>
+              <input 
+                type="password" 
+                id="reg-pass" 
+                placeholder="Mínimo 6 caracteres" 
+                minlength="6"
+                required 
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-[#3DB5B4] focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <button 
+            type="submit" 
+            class="w-full py-3.5 px-6 bg-[#3DB5B4] hover:bg-[#2ca1a0] text-white font-extrabold text-sm rounded-xl transition-all shadow-md mt-2"
+          >
+            CADASTRAR E IR PARA PAGAMENTO
+          </button>
+        </form>
+
+        <!-- Form 2: LOGIN (Oculto por Padrão) -->
+        <form id="checkout-login-form" onsubmit="handleCheckoutLogin(event)" class="space-y-4 max-w-md mx-auto hidden">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">E-mail ou CPF *</label>
+            <input 
+              type="text" 
+              id="login-email" 
+              placeholder="Digite seu e-mail cadastrado" 
+              required 
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-[#3DB5B4] focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Sua Senha *</label>
+            <input 
+              type="password" 
+              id="login-pass" 
+              placeholder="Digite sua senha" 
+              required 
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-[#3DB5B4] focus:outline-none"
+            />
+          </div>
+
+          <button 
+            type="submit" 
+            class="w-full py-3.5 px-6 bg-[#124A6E] hover:bg-[#0e3c59] text-white font-extrabold text-sm rounded-xl transition-all shadow-md mt-2"
+          >
+            ENTRAR E IR PARA PAGAMENTO
+          </button>
+        </form>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- ETAPA 3: PAGAMENTO (CARTÃO DE CRÉDITO OU PIX) -->
+      <!-- ========================================== -->
+      <div id="checkout-step-3" class="space-y-6 hidden">
+        
+        <!-- Resumo do Pedido -->
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div>
+            <span class="text-slate-500 font-medium block">Resumo da Consulta:</span>
+            <h5 id="checkout-summary-item-name" class="font-bold text-[#124A6E] text-sm">Veículo Completo</h5>
+            <p class="text-slate-500">Placa: <strong id="checkout-summary-plate" class="text-[#124A6E] font-mono-code font-bold">ABC1D23</strong></p>
+          </div>
+          <div class="text-right">
+            <span class="text-slate-500 block">Total a Pagar:</span>
+            <span id="checkout-summary-total" class="text-2xl font-extrabold text-emerald-600 font-mono-code">R$ 39,90</span>
+          </div>
+        </div>
+
+        <!-- Seletor de Método de Pagamento (Abas Cartão / PIX) -->
+        <div class="grid grid-cols-2 gap-3">
+          <button 
+            type="button" 
+            id="btn-pay-card"
+            onclick="switchPaymentMethod('card')"
+            class="py-3 px-4 rounded-xl font-bold text-xs border-2 border-[#3DB5B4] bg-[#3DB5B4]/10 text-[#124A6E] flex items-center justify-center gap-2 transition-all"
+          >
+            <span class="iconify w-4 h-4 text-[#3DB5B4]" data-icon="solar:card-bold"></span>
+            CARTÃO DE CRÉDITO
+          </button>
+
+          <button 
+            type="button" 
+            id="btn-pay-pix"
+            onclick="switchPaymentMethod('pix')"
+            class="py-3 px-4 rounded-xl font-bold text-xs border-2 border-slate-200 bg-white text-slate-600 flex items-center justify-center gap-2 hover:border-slate-300 transition-all"
+          >
+            <span class="iconify w-4 h-4 text-emerald-500" data-icon="solar:qr-code-bold"></span>
+            PIX INSTANTÂNEO
+          </button>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- FORMA DE PAGAMENTO 1: CARTÃO DE CRÉDITO -->
+        <!-- ========================================== -->
+        <div id="payment-method-card" class="space-y-5">
+          
+          <!-- MODELO VISUAL INTERATIVO DE CARTÃO DE CRÉDITO -->
+          <div class="relative w-full max-w-sm mx-auto aspect-[1.58/1] rounded-2xl bg-gradient-to-tr from-[#0F2D3E] via-[#124A6E] to-[#1F6790] text-white p-5 shadow-2xl overflow-hidden border border-white/20 transition-all transform hover:scale-[1.01]">
+            <div class="absolute -right-10 -bottom-10 w-40 h-40 rounded-full bg-[#3DB5B4]/20 blur-2xl pointer-events-none"></div>
+            
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-mono-code uppercase tracking-widest text-[#3DB5B4] font-bold">
+                DOCUMENTALISTA CARD
+              </span>
+              <!-- Logo da Bandeira (Visa / Mastercard) -->
+              <span id="card-brand-logo" class="iconify w-10 h-7 text-amber-400" data-icon="logos:mastercard"></span>
+            </div>
+
+            <!-- Chip Dourado -->
+            <div class="my-3 w-10 h-7 rounded-md bg-gradient-to-r from-amber-300 to-amber-500 flex items-center justify-center border border-amber-200/50 shadow-inner">
+              <div class="w-6 h-4 border border-amber-800/30 rounded-xs"></div>
+            </div>
+
+            <!-- Número do Cartão -->
+            <div id="card-display-number" class="font-mono-code text-base sm:text-lg font-bold tracking-widest text-slate-100 my-1">
+              •••• •••• •••• ••••
+            </div>
+
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-white/10">
+              <div>
+                <span class="text-[8px] font-mono-code text-slate-300 uppercase block">Nome do Titular</span>
+                <span id="card-display-name" class="font-mono-code text-xs font-bold uppercase truncate max-w-[180px] block text-white">
+                  SEU NOME AQUI
+                </span>
+              </div>
+              <div>
+                <span class="text-[8px] font-mono-code text-slate-300 uppercase block">Validade</span>
+                <span id="card-display-expiry" class="font-mono-code text-xs font-bold text-white">
+                  MM/AA
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FORMULÁRIO DO CARTÃO -->
+          <form onsubmit="handleCardPayment(event)" class="space-y-3 max-w-md mx-auto">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Número do Cartão *</label>
+              <input 
+                type="text" 
+                id="card-number-input" 
+                placeholder="0000 0000 0000 0000" 
+                maxlength="19"
+                required 
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono-code focus:border-[#3DB5B4] focus:outline-none"
+                oninput="updateCardNumber(this)"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Nome Impresso no Cartão *</label>
+              <input 
+                type="text" 
+                id="card-name-input" 
+                placeholder="NOME COMO ESTÁ NO CARTÃO" 
+                required 
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs uppercase focus:border-[#3DB5B4] focus:outline-none"
+                oninput="updateCardName(this)"
+              />
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Validade *</label>
+                <input 
+                  type="text" 
+                  id="card-expiry-input" 
+                  placeholder="MM/AA" 
+                  maxlength="5"
+                  required 
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono-code focus:border-[#3DB5B4] focus:outline-none"
+                  oninput="updateCardExpiry(this)"
+                />
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">CVV *</label>
+                <input 
+                  type="password" 
+                  id="card-cvv-input" 
+                  placeholder="123" 
+                  maxlength="4"
+                  required 
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono-code focus:border-[#3DB5B4] focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Parcelamento</label>
+              <select class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-[#3DB5B4] focus:outline-none">
+                <option value="1">1x sem juros (À vista)</option>
+                <option value="2">2x sem juros</option>
+                <option value="3">3x sem juros</option>
+              </select>
+            </div>
+
+            <button 
+              type="submit" 
+              class="w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm rounded-xl transition-all shadow-lg shadow-emerald-600/30 mt-2 flex items-center justify-center gap-2"
+            >
+              <span class="iconify w-5 h-5" data-icon="solar:lock-keyhole-bold"></span>
+              FINALIZAR PAGAMENTO COM CARTÃO
+            </button>
+          </form>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- FORMA DE PAGAMENTO 2: PIX INSTANTÂNEO -->
+        <!-- ========================================== -->
+        <div id="payment-method-pix" class="space-y-5 hidden max-w-md mx-auto text-center">
+          <div class="bg-emerald-50 p-6 rounded-2xl border border-emerald-200">
+            <span class="text-xs font-mono-code text-emerald-700 font-bold uppercase block mb-3">
+              QR Code do Pix Gerado com Sucesso
+            </span>
+            
+            <!-- QR Code Graphic Mockup -->
+            <div class="w-44 h-44 bg-white p-3 rounded-2xl border-2 border-emerald-500 mx-auto shadow-md flex items-center justify-center relative">
+              <img 
+                src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=00020126580014BR.GOV.BCB.PIX0136documentalista.consultas@pagamento.com.br520400005303986540539.905802BR5923DOCUMENTALISTA6009SAO%20PAULO620705031236304E85C" 
+                alt="QR Code Pix"
+                class="w-full h-full object-contain rounded-lg"
+              />
+            </div>
+
+            <p class="text-xs text-slate-600 mt-4">
+              Escaneie o código com o aplicativo do seu banco ou copie a chave Pix abaixo:
+            </p>
+
+            <!-- Chave Pix Copia e Cola -->
+            <div class="mt-3 flex items-center gap-2 bg-white p-2.5 rounded-xl border border-emerald-300">
+              <input 
+                type="text" 
+                readonly 
+                value="00020126580014BR.GOV.BCB.PIX0136documentalista.consultas@pagamento.com.br520400005303986540539.90" 
+                class="w-full text-[11px] font-mono-code text-slate-600 bg-transparent focus:outline-none"
+              />
+              <button 
+                type="button" 
+                onclick="copyPixKey()" 
+                class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors"
+              >
+                Copiar
+              </button>
+            </div>
+            
+            <p id="pix-copy-msg" class="text-[10px] font-mono-code text-emerald-700 font-bold hidden mt-1">
+              Chave Pix copiada para a área de transferência!
+            </p>
+
+            <div class="mt-4 pt-4 border-t border-emerald-200 flex items-center justify-between text-xs text-slate-500">
+              <span class="flex items-center gap-1"><span class="iconify text-emerald-600" data-icon="solar:clock-circle-bold"></span> Expira em 15 min</span>
+              <span class="flex items-center gap-1"><span class="iconify text-emerald-600" data-icon="solar:bolt-bold"></span> Liberação imediata</span>
+            </div>
+          </div>
+
+          <button 
+            type="button" 
+            onclick="handlePixPayment()"
+            class="w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm rounded-xl transition-all shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2"
+          >
+            <span class="iconify w-5 h-5" data-icon="solar:check-circle-bold"></span>
+            CONFIRMAR PAGAMENTO PIX (SIMULAR)
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script is:inline>
+  let checkoutStep = 1;
+  let checkoutAuthMode = 'register'; // 'register' | 'login'
+  let checkoutPaymentMethod = 'card'; // 'card' | 'pix'
+
+  function openCheckoutModal(plate = '') {
+    const modal = document.getElementById('checkout-modal');
+    if (!modal) return;
+
+    if (plate) {
+      const input = document.getElementById('checkout-plate-input');
+      if (input) input.value = plate.toUpperCase();
+    }
+
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    setCheckoutStep(1);
+  }
+
+  function closeCheckoutModal() {
+    const modal = document.getElementById('checkout-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  }
+
+  function setCheckoutStep(step) {
+    checkoutStep = step;
+    
+    // Atualiza steps visíveis
+    document.getElementById('checkout-step-1')?.classList.toggle('hidden', step !== 1);
+    document.getElementById('checkout-step-2')?.classList.toggle('hidden', step !== 2);
+    document.getElementById('checkout-step-3')?.classList.toggle('hidden', step !== 3);
+
+    // Atualiza barra de progresso
+    const bar = document.getElementById('checkout-progress-bar');
+    if (bar) {
+      bar.style.width = step === 1 ? '0%' : step === 2 ? '50%' : '100%';
+    }
+
+    // Atualiza indicadores de bolinhas
+    for (let i = 1; i <= 3; i++) {
+      const dot = document.getElementById(`step-dot-${i}`);
+      const label = document.getElementById(`step-label-${i}`);
+      if (dot && label) {
+        if (i <= step) {
+          dot.className = "relative z-10 w-8 h-8 rounded-full bg-[#3DB5B4] text-white font-mono-code font-bold text-xs flex items-center justify-center shadow-md";
+          label.className = "text-[#3DB5B4] font-bold";
+        } else {
+          dot.className = "relative z-10 w-8 h-8 rounded-full bg-slate-300 text-slate-600 font-mono-code font-bold text-xs flex items-center justify-center";
+          label.className = "text-slate-400 font-normal";
+        }
+      }
+    }
+  }
+
+  // ETAPA 1 -> 2
+  function formatCheckoutPlate(input) {
+    let val = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (val.length > 3 && /^[A-Z]{3}[0-9]/.test(val)) {
+      val = val.substring(0, 3) + '-' + val.substring(3, 7);
+    } else {
+      val = val.substring(0, 7);
+    }
+    input.value = val;
+    document.getElementById('checkout-plate-error')?.classList.add('hidden');
+  }
+
+  function submitCheckoutStep1() {
+    const input = document.getElementById('checkout-plate-input');
+    const rawVal = input ? input.value.replace(/[^A-Z0-9]/g, '') : '';
+    if (rawVal.length !== 7) {
+      document.getElementById('checkout-plate-error')?.classList.remove('hidden');
+      return;
+    }
+    
+    // Se o usuário já estiver logado, pula a etapa de login
+    const savedUser = localStorage.getItem('documentalista_user');
+    if (savedUser) {
+      updateCheckoutSummary();
+      setCheckoutStep(3);
+    } else {
+      setCheckoutStep(2);
+    }
+  }
+
+  // ETAPA 2: Alternância Cadastro / Login
+  function switchAuthTab(mode) {
+    checkoutAuthMode = mode;
+    const btnReg = document.getElementById('btn-tab-register');
+    const btnLog = document.getElementById('btn-tab-login');
+    const formReg = document.getElementById('checkout-register-form');
+    const formLog = document.getElementById('checkout-login-form');
+
+    if (mode === 'register') {
+      btnReg.className = "py-3 px-4 rounded-xl font-bold text-xs border-2 border-[#3DB5B4] bg-[#3DB5B4]/10 text-[#124A6E] transition-all";
+      btnLog.className = "py-3 px-4 rounded-xl font-bold text-xs border-2 border-slate-200 bg-white text-slate-600 hover:border-slate-300 transition-all";
+      formReg.classList.remove('hidden');
+      formLog.classList.add('hidden');
+    } else {
+      btnLog.className = "py-3 px-4 rounded-xl font-bold text-xs border-2 border-[#3DB5B4] bg-[#3DB5B4]/10 text-[#124A6E] transition-all";
+      btnReg.className = "py-3 px-4 rounded-xl font-bold text-xs border-2 border-slate-200 bg-white text-slate-600 hover:border-slate-300 transition-all";
+      formLog.classList.remove('hidden');
+      formReg.classList.add('hidden');
+    }
+  }
+
+  function formatCPF(input) {
+    let v = input.value.replace(/\D/g, '').substring(0, 11);
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    input.value = v;
+  }
+
+  function formatPhone(input) {
+    let v = input.value.replace(/\D/g, '').substring(0, 11);
+    v = v.replace(/^(\d{2})(\d)/g, '($1) $2');
+    v = v.replace(/(\d{5})(\d)/, '$1-$2');
+    input.value = v;
+  }
+
+  function handleCheckoutRegister(e) {
+    e.preventDefault();
+    const user = {
+      name: document.getElementById('reg-name').value,
+      email: document.getElementById('reg-email').value,
+      cpf: document.getElementById('reg-cpf').value,
+      phone: document.getElementById('reg-phone').value,
+      createdAt: new Date().toLocaleDateString('pt-BR')
+    };
+    localStorage.setItem('documentalista_user', JSON.stringify(user));
+    updateCheckoutSummary();
+    setCheckoutStep(3);
+  }
+
+  function handleCheckoutLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value;
+    const user = {
+      name: email.split('@')[0].toUpperCase(),
+      email: email,
+      cpf: '123.456.789-00',
+      phone: '(31) 98888-7777',
+      createdAt: '15/09/2026'
+    };
+    localStorage.setItem('documentalista_user', JSON.stringify(user));
+    
+    // Se o login foi iniciado diretamente (ex: pelo botão Entrar no topo), redireciona direto para Compras Realizadas
+    const plateInput = document.getElementById('checkout-plate-input')?.value;
+    if (!plateInput || plateInput.trim() === '') {
+      window.location.href = '/painel?tab=orders';
+    } else {
+      updateCheckoutSummary();
+      setCheckoutStep(3);
+    }
+  }
+
+  // ETAPA 3: Atualiza resumo e alternância Cartão / PIX
+  function updateCheckoutSummary() {
+    const plate = document.getElementById('checkout-plate-input')?.value || 'ABC1D23';
+    const summaryPlate = document.getElementById('checkout-summary-plate');
+    if (summaryPlate) summaryPlate.textContent = plate;
+
+    const totalEl = document.getElementById('cart-total-price');
+    const summaryTotal = document.getElementById('checkout-summary-total');
+    if (totalEl && summaryTotal) summaryTotal.textContent = totalEl.textContent || 'R$ 39,90';
+  }
+
+  function switchPaymentMethod(method) {
+    checkoutPaymentMethod = method;
+    const btnCard = document.getElementById('btn-pay-card');
+    const btnPix = document.getElementById('btn-pay-pix');
+    const viewCard = document.getElementById('payment-method-card');
+    const viewPix = document.getElementById('payment-method-pix');
+
+    if (method === 'card') {
+      btnCard.className = "py-3 px-4 rounded-xl font-bold text-xs border-2 border-[#3DB5B4] bg-[#3DB5B4]/10 text-[#124A6E] flex items-center justify-center gap-2 transition-all";
+      btnPix.className = "py-3 px-4 rounded-xl font-bold text-xs border-2 border-slate-200 bg-white text-slate-600 flex items-center justify-center gap-2 hover:border-slate-300 transition-all";
+      viewCard.classList.remove('hidden');
+      viewPix.classList.add('hidden');
+    } else {
+      btnPix.className = "py-3 px-4 rounded-xl font-bold text-xs border-2 border-emerald-500 bg-emerald-50 text-emerald-800 flex items-center justify-center gap-2 transition-all";
+      btnCard.className = "py-3 px-4 rounded-xl font-bold text-xs border-2 border-slate-200 bg-white text-slate-600 flex items-center justify-center gap-2 hover:border-slate-300 transition-all";
+      viewPix.classList.remove('hidden');
+      viewCard.classList.add('hidden');
+    }
+  }
+
+  // Interatividade do Modelo de Cartão de Crédito
+  function updateCardNumber(input) {
+    let v = input.value.replace(/\D/g, '').substring(0, 16);
+    v = v.replace(/(\d{4})/g, '$1 ').trim();
+    input.value = v;
+    const display = document.getElementById('card-display-number');
+    if (display) display.textContent = v || '•••• •••• •••• ••••';
+  }
+
+  function updateCardName(input) {
+    const display = document.getElementById('card-display-name');
+    if (display) display.textContent = input.value.toUpperCase() || 'SEU NOME AQUI';
+  }
+
+  function updateCardExpiry(input) {
+    let v = input.value.replace(/\D/g, '').substring(0, 4);
+    if (v.length >= 2) v = v.substring(0, 2) + '/' + v.substring(2, 4);
+    input.value = v;
+    const display = document.getElementById('card-display-expiry');
+    if (display) display.textContent = v || 'MM/AA';
+  }
+
+  function copyPixKey() {
+    navigator.clipboard.writeText("00020126580014BR.GOV.BCB.PIX0136documentalista.consultas@pagamento.com.br520400005303986540539.90");
+    const msg = document.getElementById('pix-copy-msg');
+    if (msg) {
+      msg.classList.remove('hidden');
+      setTimeout(() => msg.classList.add('hidden'), 3000);
+    }
+  }
+
+  // Finalização do Pagamento -> Salva Pedido e Redireciona para Compras Realizadas no Painel (/painel?tab=orders)
+  function handleCardPayment(e) {
+    e.preventDefault();
+    completeOrderAndRedirect('Cartão de Crédito');
+  }
+
+  function handlePixPayment() {
+    completeOrderAndRedirect('Pix Instantâneo');
+  }
+
+  function completeOrderAndRedirect(paymentMethod) {
+    const plate = document.getElementById('checkout-plate-input')?.value || 'ABC1D23';
+    const total = document.getElementById('checkout-summary-total')?.textContent || 'R$ 39,90';
+
+    // Salvar pedido no localStorage
+    const purchases = JSON.parse(localStorage.getItem('documentalista_purchases') || '[]');
+    purchases.unshift({
+      id: 'DOC-' + Math.floor(100000 + Math.random() * 900000),
+      plate: plate,
+      title: 'Veículo Completo',
+      date: new Date().toLocaleDateString('pt-BR'),
+      price: total,
+      method: paymentMethod,
+      status: 'Concluído'
+    });
+    localStorage.setItem('documentalista_purchases', JSON.stringify(purchases));
+
+    // Redirecionar diretamente para a aba Compras Realizadas da área do cliente
+    window.location.href = '/painel?tab=orders';
+  }
+
+  window.openCheckoutModal = openCheckoutModal;
+  window.closeCheckoutModal = closeCheckoutModal;
+  window.setCheckoutStep = setCheckoutStep;
+  window.switchAuthTab = switchAuthTab;
+  window.switchPaymentMethod = switchPaymentMethod;
+  window.formatCPF = formatCPF;
+  window.formatPhone = formatPhone;
+  window.formatCheckoutPlate = formatCheckoutPlate;
+  window.submitCheckoutStep1 = submitCheckoutStep1;
+  window.handleCheckoutRegister = handleCheckoutRegister;
+  window.handleCheckoutLogin = handleCheckoutLogin;
+  window.updateCardNumber = updateCardNumber;
+  window.updateCardName = updateCardName;
+  window.updateCardExpiry = updateCardExpiry;
+  window.copyPixKey = copyPixKey;
+  window.handleCardPayment = handleCardPayment;
+  window.handlePixPayment = handlePixPayment;
+</script>

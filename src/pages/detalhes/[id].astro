@@ -1,0 +1,470 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Button from '../../components/Button.astro';
+import { productsData, getProductById } from '../../data/products';
+
+export async function getStaticPaths() {
+  return productsData.map(product => ({
+    params: { id: product.id },
+    props: { product }
+  }));
+}
+
+const { product } = Astro.props;
+const otherProducts = productsData.filter(p => p.id !== product.id);
+const pdfUrl = '/pdf/consulta-modelo.pdf';
+---
+
+<Layout 
+  title={`DOCUMENTALISTA CONSULTAS — ${product.title} | Detalhes da Consulta Veicular`}
+  description={product.description}
+>
+  <main class="bg-slate-50/50 min-h-screen pb-20">
+    
+    <!-- ========================================== -->
+    <!-- BREADCRUMBS & TOP HEADER -->
+    <!-- ========================================== -->
+    <div class="bg-[#0F2D3E] text-white pt-8 pb-16 relative overflow-hidden">
+      <!-- Background overlay gradient -->
+      <div 
+        class="absolute inset-0 z-0 pointer-events-none opacity-40"
+        style="background: linear-gradient(120deg, rgba(63, 179, 157, 0.7), rgba(31, 103, 144, 0.9));"
+      ></div>
+
+      <div class="max-w-[1400px] mx-auto px-6 lg:px-[6%] relative z-10">
+        
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-xs text-slate-300 mb-6 font-medium">
+          <a href="/" class="hover:text-white transition-colors flex items-center gap-1">
+            <span class="iconify" data-icon="solar:home-2-linear"></span> Início
+          </a>
+          <span>/</span>
+          <a href="/#planos" class="hover:text-white transition-colors">Opções de Consulta</a>
+          <span>/</span>
+          <span class="text-[#3DB5B4] font-bold">{product.title}</span>
+        </nav>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          
+          <!-- Informações do Produto (Esquerda) -->
+          <div class="lg:col-span-7">
+            <div class="flex items-center gap-2 mb-4">
+              <span class="bg-[#3DB5B4]/20 text-[#3DB5B4] border border-[#3DB5B4]/30 text-xs font-mono-code font-bold uppercase px-3 py-1 rounded-full">
+                {product.category}
+              </span>
+              {product.badge && (
+                <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-mono-code font-bold uppercase px-3 py-1 rounded-full">
+                  ★ {product.badge}
+                </span>
+              )}
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+              Consulta {product.title}
+            </h1>
+
+            <p class="text-base sm:text-lg text-slate-200 mt-4 leading-relaxed max-w-2xl">
+              {product.tagline}
+            </p>
+
+            <!-- Preço Destaque Verde Emerald na Hero -->
+            <div class="mt-8 flex items-baseline gap-3 flex-wrap">
+              {product.originalPrice && (
+                <span class="text-sm text-slate-300 line-through font-mono-code">
+                  De {product.originalPrice}
+                </span>
+              )}
+              <span class="text-4xl sm:text-5xl font-extrabold text-emerald-400 font-mono-code drop-shadow-sm">
+                {product.price}
+              </span>
+              <span class="text-xs text-slate-200 font-bold uppercase tracking-wider bg-white/10 px-2.5 py-1 rounded-md">
+                Por consulta instantânea
+              </span>
+              {product.discountBadge && (
+                <span class="bg-emerald-400 text-[#0F2D3E] text-xs font-extrabold font-mono-code px-2.5 py-1 rounded-full uppercase">
+                  {product.discountBadge}
+                </span>
+              )}
+            </div>
+
+            <!-- Prova Social rápida + Botão Ver Modelo da Consulta -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-6 pt-6 border-t border-white/15">
+              <div class="flex items-center gap-3">
+                <div class="flex text-amber-400 text-xs items-center flex-shrink-0">
+                  <span class="iconify" data-icon="solar:star-bold"></span>
+                  <span class="iconify" data-icon="solar:star-bold"></span>
+                  <span class="iconify" data-icon="solar:star-bold"></span>
+                  <span class="iconify" data-icon="solar:star-bold"></span>
+                  <span class="iconify" data-icon="solar:star-bold"></span>
+                </div>
+                <span class="text-xs text-slate-300">
+                  Avaliação <strong>4.9/5.0</strong> baseada em +150.000 consultas emitidas.
+                </span>
+              </div>
+
+              <button 
+                type="button" 
+                onclick="openPdfModal()"
+                class="inline-flex items-center gap-2 bg-[#3DB5B4] hover:bg-[#2ca1a0] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-[#3DB5B4]/20 hover:scale-[1.02] flex-shrink-0 w-max"
+              >
+                <span class="iconify w-4 h-4" data-icon="solar:document-text-bold"></span>
+                Ver Modelo da Consulta
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Card de Consulta Rápida por Placa (Direita) -->
+          <div class="lg:col-span-5">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-2xl border border-slate-200 text-slate-900">
+              
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-mono-code text-[#3DB5B4] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-[#3DB5B4] animate-ping"></span>
+                  Consultar {product.title}
+                </span>
+                <span class="text-[10px] font-mono-code bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full font-bold">
+                  PRÉVIA ONLINE
+                </span>
+              </div>
+
+              <h3 class="text-lg font-bold text-[#124A6E] mb-1">Informe a placa do veículo</h3>
+              <p class="text-xs text-slate-500 mb-5">Padrão Mercosul (ABC1D23) ou Tradicional (ABC-1234).</p>
+
+              <!-- Formulário de Placa Estilizado -->
+              <form 
+                onsubmit={`event.preventDefault(); const p = document.getElementById('detalhe-plate-input').value; if(p) { addToCart('${product.id}'); } else { alert('Por favor, informe a placa.'); }`}
+                class="space-y-4"
+              >
+                <div class="plate-input-container">
+                  <div class="plate-header-mercosul">
+                    <span>BRASIL</span>
+                    <span class="iconify w-4 h-3" data-icon="flag:br-4x3"></span>
+                  </div>
+                  <div class="p-3 bg-white flex items-center">
+                    <input 
+                      type="text" 
+                      id="detalhe-plate-input" 
+                      maxlength="8" 
+                      placeholder="ABC1D23" 
+                      required
+                      class="w-full text-center text-3xl font-mono-code font-bold uppercase text-[#124A6E] tracking-widest focus:outline-none placeholder:text-slate-300"
+                      oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '')"
+                    />
+                  </div>
+                </div>
+
+                <Button type="submit" variant="primary" size="lg" fullWidth pulse icon="solar:magnifier-linear">
+                  {product.ctaText}
+                </Button>
+              </form>
+
+              <!-- Selos de Segurança -->
+              <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-around text-slate-400 text-[11px] font-mono-code">
+                <span class="flex items-center gap-1"><span class="iconify text-[#3DB5B4]" data-icon="solar:shield-check-bold"></span> SSL Seguro</span>
+                <span class="flex items-center gap-1"><span class="iconify text-[#3DB5B4]" data-icon="solar:bolt-bold"></span> Pix Liberado</span>
+                <span class="flex items-center gap-1"><span class="iconify text-[#3DB5B4]" data-icon="solar:document-bold"></span> PDF na Tela</span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="max-w-[1400px] mx-auto px-6 lg:px-[6%] mt-12 space-y-16">
+      
+      <!-- ========================================== -->
+      <!-- HIGHLIGHTS / DESTAQUES DO PRODUTO -->
+      <!-- ========================================== -->
+      <section>
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="ds-label">Principais Benefícios</span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-[#124A6E]">
+            O que você descobre nesta consulta
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {product.highlights.map(item => (
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-[#3DB5B4] transition-all flex flex-col justify-between">
+              <div>
+                <div class="w-12 h-12 rounded-xl bg-[#3DB5B4]/15 text-[#3DB5B4] flex items-center justify-center mb-4">
+                  <span class="iconify w-6 h-6" data-icon={item.icon}></span>
+                </div>
+                <h3 class="text-base font-bold text-[#124A6E] mb-2">{item.title}</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TABELA / GRADE DE CHECAGENS DETALHADAS -->
+      <!-- ========================================== -->
+      <section class="bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-slate-100">
+          <div>
+            <span class="text-xs font-mono-code text-[#3DB5B4] font-bold uppercase tracking-wider">Conteúdo Detalhado</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#124A6E] mt-1">
+              Todas as informações incluídas no relatório
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">
+              Confira a lista completa de checagens realizadas para o produto <strong class="text-[#124A6E]">{product.title}</strong>.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-full font-mono-code">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              {product.features.filter(f => f.included).length} Checagens Ativas
+            </span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+          {product.features.map(feat => (
+            <div class={`p-4 rounded-xl border transition-all flex items-start gap-3.5 ${
+              feat.included 
+                ? feat.highlight 
+                  ? 'bg-emerald-50/50 border-emerald-200/80' 
+                  : 'bg-slate-50/80 border-slate-200/60'
+                : 'bg-slate-100/50 border-slate-200/40 opacity-50'
+            }`}>
+              {feat.included ? (
+                <span class="iconify text-emerald-500 w-5 h-5 flex-shrink-0 mt-0.5" data-icon="solar:check-circle-bold"></span>
+              ) : (
+                <span class="iconify text-slate-400 w-5 h-5 flex-shrink-0 mt-0.5" data-icon="solar:close-circle-linear"></span>
+              )}
+              <div>
+                <h4 class="text-xs sm:text-sm font-bold text-[#124A6E] flex items-center gap-2">
+                  {feat.name}
+                  {feat.highlight && (
+                    <span class="bg-emerald-100 text-emerald-800 text-[9px] font-mono-code font-bold uppercase px-2 py-0.2 rounded-full">Destaque</span>
+                  )}
+                </h4>
+                <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{feat.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </section>
+
+      <!-- ========================================== -->
+      <!-- MODELO DE LAUDO / PRÉVIA VISUAL DO RELATÓRIO DA CONSULTA -->
+      <!-- ========================================== -->
+      <section class="bg-[#124A6E] text-white rounded-3xl p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+        
+        <div class="max-w-3xl mb-8">
+          <span class="text-xs font-mono-code bg-[#3DB5B4] text-[#124A6E] px-3 py-1 rounded-full font-bold uppercase tracking-wider">
+            Exemplo Prático
+          </span>
+          <h2 class="text-2xl sm:text-4xl font-extrabold mt-3 mb-2">
+            Veja como fica o relatório na sua tela
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-200">
+            Abaixo está uma demonstração visual do laudo gerado pela Consulta <strong class="text-white">{product.title}</strong>:
+          </p>
+        </div>
+
+        <!-- Card Mockup do Laudo -->
+        <div class="bg-white text-slate-900 rounded-2xl p-6 sm:p-8 shadow-xl border-2 border-[#3DB5B4]">
+          
+          <!-- Banner Superior do Laudo -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+            <div>
+              <span class="text-[10px] font-mono-code text-slate-400 uppercase tracking-widest block">Relatório Veicular Oficial</span>
+              <h3 class="text-lg sm:text-xl font-extrabold text-[#124A6E]">{product.sampleReport.vehicleName}</h3>
+              <p class="text-xs text-slate-500 font-mono-code">Placa: <span class="font-bold text-[#124A6E] bg-slate-100 px-2 py-0.5 rounded">{product.sampleReport.plate}</span> • Renavam: {product.sampleReport.renavamMasked}</p>
+            </div>
+
+            <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-300 text-emerald-800 px-4 py-2 rounded-xl self-start sm:self-center">
+              <span class="iconify text-emerald-600 w-6 h-6" data-icon="solar:verified-check-bold"></span>
+              <div>
+                <p class="text-[10px] font-mono-code font-bold uppercase leading-none">STATUS DO LAUDO</p>
+                <p class="text-xs font-extrabold leading-none mt-0.5">APROVADO / REGULAR</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status das Checagens -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-6">
+            {product.sampleReport.checks.map(item => (
+              <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                <span class="text-xs text-slate-500 font-semibold">{item.label}</span>
+                <span class={`text-xs font-mono-code font-bold mt-2 inline-flex items-center gap-1.5 ${item.safe ? 'text-emerald-600' : 'text-amber-600'}`}>
+                  <span class={`w-2 h-2 rounded-full ${item.safe ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
+                  {item.result}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+            <span>* Relatório emitido instantaneamente com dados atualizados do Senatran, Denatran e Leiloeiros.</span>
+            <Button onclick="openPdfModal()" variant="primary" size="sm" icon="solar:document-text-bold">
+              VER MODELO DA CONSULTA (PDF)
+            </Button>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ========================================== -->
+      <!-- FAQ ESPECÍFICO DO PRODUTO -->
+      <!-- ========================================== -->
+      {product.faq.length > 0 && (
+        <section class="max-w-4xl mx-auto">
+          <div class="text-center mb-10">
+            <span class="ds-label">Dúvidas Frequentes</span>
+            <h2 class="text-2xl sm:text-3xl font-bold text-[#124A6E]">
+              Perguntas sobre a Consulta {product.title}
+            </h2>
+          </div>
+
+          <div class="space-y-4">
+            {product.faq.map(item => (
+              <div class="border border-slate-200 rounded-2xl bg-white overflow-hidden shadow-sm">
+                <div class="p-6 font-bold text-[#124A6E] text-base flex items-center justify-between">
+                  <span>{item.question}</span>
+                  <span class="iconify text-[#3DB5B4] w-5 h-5" data-icon="solar:help-bold"></span>
+                </div>
+                <div class="px-6 pb-6 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                  {item.answer}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- ========================================== -->
+      <!-- COMPARAÇÃO COM OUTROS PRODUTOS -->
+      <!-- ========================================== -->
+      <section>
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="ds-label">Outras Opções</span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-[#124A6E]">
+            Compare com outros relatórios disponíveis
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {otherProducts.slice(0, 3).map(other => (
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+              <div>
+                <span class="text-[10px] font-mono-code text-[#3DB5B4] uppercase font-bold">{other.category}</span>
+                <h3 class="text-xl font-extrabold text-[#124A6E] mt-1 mb-2">{other.title}</h3>
+                <p class="text-xs text-slate-600 mb-6 leading-relaxed line-clamp-2">{other.description}</p>
+                <div class="flex items-baseline gap-1.5 mb-4">
+                  <span class="text-2xl font-extrabold text-emerald-600 font-mono-code">{other.price}</span>
+                </div>
+              </div>
+
+              <a 
+                href={`/detalhes/${other.id}`}
+                class="w-full py-2.5 px-4 bg-slate-100 text-[#124A6E] font-bold text-xs rounded-xl hover:bg-[#124A6E] hover:text-white transition-all text-center block"
+              >
+                Ver mais detalhes
+              </a>
+            </div>
+          ))}
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Modal do PDF -->
+    <div 
+      id="pdf-modal" 
+      class="fixed inset-0 z-[999] bg-slate-900/80 backdrop-blur-md hidden flex items-center justify-center p-4 sm:p-6 transition-opacity duration-300"
+    >
+      <div class="bg-white rounded-3xl w-full max-w-5xl h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200">
+        <div class="bg-[#124A6E] text-white px-6 py-4 flex items-center justify-between border-b border-white/10">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-[#3DB5B4]/20 text-[#3DB5B4] flex items-center justify-center">
+              <span class="iconify w-5 h-5" data-icon="solar:document-text-bold"></span>
+            </div>
+            <div>
+              <h3 class="text-base font-bold leading-tight">Modelo Oficial de Consulta</h3>
+              <p class="text-xs text-slate-300 font-mono-code">Documentalista Consultas Veiculares</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <a 
+              href={pdfUrl} 
+              download="modelo-consulta-documentalista.pdf"
+              target="_blank"
+              class="inline-flex items-center gap-1.5 bg-[#3DB5B4] hover:bg-[#2ca1a0] text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-colors shadow-sm"
+            >
+              <span class="iconify w-4 h-4" data-icon="solar:download-minimalistic-bold"></span>
+              <span class="hidden sm:inline">Baixar PDF</span>
+            </a>
+
+            <button 
+              type="button" 
+              onclick="closePdfModal()" 
+              class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors focus:outline-none"
+              aria-label="Fechar Modal"
+            >
+              <span class="iconify w-5 h-5" data-icon="solar:close-circle-bold"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex-1 bg-slate-100 p-2 sm:p-4 overflow-hidden relative">
+          <iframe 
+            src={pdfUrl} 
+            class="w-full h-full rounded-2xl border border-slate-200 shadow-inner bg-white"
+            title="Modelo de Consulta Veicular PDF"
+          ></iframe>
+        </div>
+
+        <div class="bg-slate-50 border-t border-slate-200 px-6 py-3 flex items-center justify-between text-xs text-slate-500">
+          <span class="flex items-center gap-1.5 font-medium">
+            <span class="iconify text-emerald-500 w-4 h-4" data-icon="solar:shield-check-bold"></span>
+            Documento oficial emitido em tempo real pela base homologada.
+          </span>
+          <button 
+            type="button" 
+            onclick="closePdfModal()"
+            class="text-slate-600 font-bold hover:text-[#124A6E]"
+          >
+            Fechar Visualização
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</Layout>
+
+<script is:inline>
+  function openPdfModal() {
+    const modal = document.getElementById('pdf-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closePdfModal() {
+    const modal = document.getElementById('pdf-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closePdfModal();
+    }
+  });
+</script>

@@ -1,0 +1,249 @@
+---
+// ProductGallery.astro — Galeria Estilo E-Commerce para Páginas de Produto
+interface Props {
+  mainImage?: string;
+  video1?: string;
+  video2?: string;
+  pdfUrl?: string;
+  productTitle?: string;
+}
+
+const {
+  mainImage = '/images/Consulta-veicular.png',
+  video1 = '/images/Men_discussing_vehicle_history_t%E2%80%A6_20260915190222.mp4',
+  video2 = '/images/Men_discussing_vehicle_history_t%E2%80%A6_20260915190222.mp4',
+  pdfUrl = '/pdf/consulta-modelo.pdf',
+  productTitle = 'Consulta Veicular'
+} = Astro.props;
+---
+
+<div class="product-gallery-container flex flex-col gap-4">
+  <!-- 1. CONTAINER DA MÍDIA PRINCIPAL (IMAGEM GRANDE / VÍDEO) -->
+  <div class="bg-white rounded-2xl border-2 border-slate-200/80 p-3 shadow-xl overflow-hidden relative group">
+    
+    <!-- Mídia Ativa Wrapper -->
+    <div id="gallery-main-display" class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center relative">
+      
+      <!-- Imagem Principal (Visível por Padrão) -->
+      <img 
+        id="gallery-main-image"
+        src={mainImage} 
+        alt={`Modelo da ${productTitle}`} 
+        class="w-full h-full object-contain object-center transition-opacity duration-300"
+      />
+
+      <!-- Player de Vídeo (Oculto por Padrão) -->
+      <video 
+        id="gallery-main-video"
+        controls 
+        playsinline
+        preload="metadata"
+        class="w-full h-full object-cover hidden rounded-xl"
+      >
+        <source src={video1} type="video/mp4" />
+        Seu navegador não suporta reprodução de vídeo.
+      </video>
+
+    </div>
+
+    <!-- Botão VER MODELO DA CONSULTA (Abaixo da preview principal) -->
+    <div class="mt-3">
+      <button 
+        type="button"
+        onclick="openPdfModal()"
+        class="w-full py-3 px-4 bg-white hover:bg-slate-50 text-[#3DB5B4] hover:text-[#124A6E] font-extrabold text-sm sm:text-base rounded-xl border-2 border-[#3DB5B4] flex items-center justify-center gap-2 shadow-sm hover:shadow transition-all duration-300 group-hover:border-[#124A6E]"
+      >
+        <span class="iconify w-5 h-5 text-[#3DB5B4] group-hover:text-[#124A6E]" data-icon="solar:document-text-bold"></span>
+        VER MODELO DA CONSULTA
+      </button>
+    </div>
+
+  </div>
+
+  <!-- 2. TRÊS MINIATURAS (THUMBNAILS) -->
+  <div class="grid grid-cols-3 gap-3">
+    
+    <!-- Miniatura 1: Imagem do Laudo -->
+    <button 
+      type="button"
+      onclick="selectGalleryMedia('image', 0)"
+      class="gallery-thumb active aspect-square rounded-xl border-2 border-[#3DB5B4] bg-white p-1 overflow-hidden relative hover:opacity-90 transition-all focus:outline-none ring-2 ring-[#3DB5B4]/30"
+      id="thumb-0"
+    >
+      <img src={mainImage} alt="Preview do Laudo" class="w-full h-full object-cover rounded-lg" />
+      <span class="absolute bottom-1 right-1 bg-black/60 text-white text-[9px] font-mono-code px-1.5 py-0.5 rounded backdrop-blur-sm">
+        LAUDO
+      </span>
+    </button>
+
+    <!-- Miniatura 2: Vídeo Explicativo 1 -->
+    <button 
+      type="button"
+      onclick="selectGalleryMedia('video', 1)"
+      class="gallery-thumb aspect-square rounded-xl border-2 border-slate-200 bg-slate-900 p-1 overflow-hidden relative hover:border-[#3DB5B4] transition-all focus:outline-none"
+      id="thumb-1"
+    >
+      <video class="w-full h-full object-cover rounded-lg opacity-80 pointer-events-none" muted preload="metadata">
+        <source src={video1} type="video/mp4" />
+      </video>
+      <div class="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg">
+        <span class="iconify w-8 h-8 text-white drop-shadow-md" data-icon="solar:play-circle-bold"></span>
+      </div>
+      <span class="absolute bottom-1 right-1 bg-black/60 text-white text-[9px] font-mono-code px-1.5 py-0.5 rounded backdrop-blur-sm flex items-center gap-0.5">
+        <span class="iconify" data-icon="solar:videocamera-bold"></span> VÍDEO 1
+      </span>
+    </button>
+
+    <!-- Miniatura 3: Vídeo Explicativo 2 -->
+    <button 
+      type="button"
+      onclick="selectGalleryMedia('video', 2)"
+      class="gallery-thumb aspect-square rounded-xl border-2 border-slate-200 bg-slate-900 p-1 overflow-hidden relative hover:border-[#3DB5B4] transition-all focus:outline-none"
+      id="thumb-2"
+    >
+      <video class="w-full h-full object-cover rounded-lg opacity-80 pointer-events-none" muted preload="metadata">
+        <source src={video2} type="video/mp4" />
+      </video>
+      <div class="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg">
+        <span class="iconify w-8 h-8 text-white drop-shadow-md" data-icon="solar:play-circle-bold"></span>
+      </div>
+      <span class="absolute bottom-1 right-1 bg-black/60 text-white text-[9px] font-mono-code px-1.5 py-0.5 rounded backdrop-blur-sm flex items-center gap-0.5">
+        <span class="iconify" data-icon="solar:videocamera-bold"></span> VÍDEO 2
+      </span>
+    </button>
+
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- MODAL DE EXIBIÇÃO DO MODELO EM PDF -->
+<!-- ========================================== -->
+<div 
+  id="pdf-modal" 
+  class="fixed inset-0 z-[999] bg-slate-900/80 backdrop-blur-md hidden flex items-center justify-center p-4 sm:p-6 transition-opacity duration-300"
+>
+  <div class="bg-white rounded-3xl w-full max-w-5xl h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200 animate-reveal">
+    
+    <!-- Modal Header -->
+    <div class="bg-[#124A6E] text-white px-6 py-4 flex items-center justify-between border-b border-white/10">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-[#3DB5B4]/20 text-[#3DB5B4] flex items-center justify-center">
+          <span class="iconify w-5 h-5" data-icon="solar:document-text-bold"></span>
+        </div>
+        <div>
+          <h3 class="text-base font-bold leading-tight">Modelo Oficial de Consulta</h3>
+          <p class="text-xs text-slate-300 font-mono-code">Documentalista Consultas Veiculares</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a 
+          href={pdfUrl} 
+          download="modelo-consulta-documentalista.pdf"
+          target="_blank"
+          class="inline-flex items-center gap-1.5 bg-[#3DB5B4] hover:bg-[#2ca1a0] text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-colors shadow-sm"
+        >
+          <span class="iconify w-4 h-4" data-icon="solar:download-minimalistic-bold"></span>
+          <span class="hidden sm:inline">Baixar PDF</span>
+        </a>
+
+        <button 
+          type="button" 
+          onclick="closePdfModal()" 
+          class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors focus:outline-none"
+          aria-label="Fechar Modal"
+        >
+          <span class="iconify w-5 h-5" data-icon="solar:close-circle-bold"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal Body (Iframe do PDF) -->
+    <div class="flex-1 bg-slate-100 p-2 sm:p-4 overflow-hidden relative">
+      <iframe 
+        id="pdf-iframe"
+        src={pdfUrl} 
+        class="w-full h-full rounded-2xl border border-slate-200 shadow-inner bg-white"
+        title="Modelo de Consulta Veicular PDF"
+      ></iframe>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="bg-slate-50 border-t border-slate-200 px-6 py-3 flex items-center justify-between text-xs text-slate-500">
+      <span class="flex items-center gap-1.5 font-medium">
+        <span class="iconify text-emerald-500 w-4 h-4" data-icon="solar:shield-check-bold"></span>
+        Documento oficial emitido em tempo real pela base homologada.
+      </span>
+      <button 
+        type="button" 
+        onclick="closePdfModal()"
+        class="text-slate-600 font-bold hover:text-[#124A6E]"
+      >
+        Fechar Visualização
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script is:inline>
+  function selectGalleryMedia(type, index) {
+    const mainImg = document.getElementById('gallery-main-image');
+    const mainVideo = document.getElementById('gallery-main-video');
+    
+    // Atualiza bordas das miniaturas
+    for (let i = 0; i < 3; i++) {
+      const thumb = document.getElementById(`thumb-${i}`);
+      if (thumb) {
+        if (i === index) {
+          thumb.classList.add('border-[#3DB5B4]', 'ring-2', 'ring-[#3DB5B4]/30');
+          thumb.classList.remove('border-slate-200');
+        } else {
+          thumb.classList.remove('border-[#3DB5B4]', 'ring-2', 'ring-[#3DB5B4]/30');
+          thumb.classList.add('border-slate-200');
+        }
+      }
+    }
+
+    if (type === 'image') {
+      if (mainVideo) {
+        mainVideo.pause();
+        mainVideo.classList.add('hidden');
+      }
+      if (mainImg) {
+        mainImg.classList.remove('hidden');
+      }
+    } else if (type === 'video') {
+      if (mainImg) {
+        mainImg.classList.add('hidden');
+      }
+      if (mainVideo) {
+        mainVideo.classList.remove('hidden');
+        mainVideo.play().catch(() => {});
+      }
+    }
+  }
+
+  function openPdfModal() {
+    const modal = document.getElementById('pdf-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closePdfModal() {
+    const modal = document.getElementById('pdf-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Fechar modal ao pressionar ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closePdfModal();
+    }
+  });
+</script>

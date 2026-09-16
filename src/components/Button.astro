@@ -1,0 +1,97 @@
+---
+// Button.astro — Componente Reutilizável de Botão do Documentalista Consultas
+interface Props {
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  variant?: 'primary' | 'secondary' | 'accent' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  fullWidth?: boolean;
+  shimmer?: boolean;
+  pulse?: boolean;
+  icon?: string;
+  iconPosition?: 'left' | 'right';
+  onclick?: string;
+  id?: string;
+  class?: string;
+  target?: string;
+  rel?: string;
+}
+
+const {
+  href,
+  type = 'button',
+  variant = 'primary',
+  size = 'md',
+  fullWidth = false,
+  shimmer = true,
+  pulse = false,
+  icon,
+  iconPosition = 'left',
+  onclick,
+  id,
+  class: extraClass = '',
+  target,
+  rel,
+  ...rest
+} = Astro.props;
+
+const baseStyles = "inline-flex items-center justify-center font-bold uppercase tracking-wider rounded-xl transition-all duration-300 text-center";
+
+const variantStyles = {
+  primary: "bg-[#124A6E] hover:bg-[#3DB5B4] text-white shadow-md shadow-[#124A6E]/15 hover:shadow-lg hover:shadow-[#3DB5B4]/25",
+  secondary: "bg-[#3DB5B4] hover:bg-[#124A6E] text-white shadow-md shadow-[#3DB5B4]/15 hover:shadow-lg",
+  accent: "bg-[#3DB5B4] hover:bg-[#2ca1a0] text-white shadow-md shadow-[#3DB5B4]/30 hover:shadow-lg",
+  outline: "bg-transparent border border-slate-200 text-[#124A6E] hover:bg-slate-100",
+  ghost: "bg-slate-100 hover:bg-[#3DB5B4]/15 text-[#124A6E] border border-slate-200"
+};
+
+const sizeStyles = {
+  sm: "py-2.5 px-4 text-xs gap-1.5",
+  md: "py-3.5 px-6 text-xs gap-2",
+  lg: "py-4 px-8 sm:px-10 text-sm gap-2"
+};
+
+const widthStyle = fullWidth ? "w-full" : "";
+const shimmerStyle = shimmer ? "btn-shimmer" : "";
+const pulseStyle = pulse ? "animate-pulse-glow" : "";
+
+const computedClass = [
+  baseStyles,
+  variantStyles[variant],
+  sizeStyles[size],
+  widthStyle,
+  shimmerStyle,
+  pulseStyle,
+  extraClass
+].filter(Boolean).join(" ");
+---
+
+{
+  href ? (
+    <a 
+      href={href} 
+      class={computedClass} 
+      id={id} 
+      onclick={onclick} 
+      target={target} 
+      rel={rel} 
+      {...rest}
+    >
+      {icon && iconPosition === 'left' && <span class="iconify w-4 h-4 flex-shrink-0" data-icon={icon}></span>}
+      <slot />
+      {icon && iconPosition === 'right' && <span class="iconify w-4 h-4 flex-shrink-0" data-icon={icon}></span>}
+    </a>
+  ) : (
+    <button 
+      type={type} 
+      class={computedClass} 
+      id={id} 
+      onclick={onclick} 
+      {...rest}
+    >
+      {icon && iconPosition === 'left' && <span class="iconify w-4 h-4 flex-shrink-0" data-icon={icon}></span>}
+      <slot />
+      {icon && iconPosition === 'right' && <span class="iconify w-4 h-4 flex-shrink-0" data-icon={icon}></span>}
+    </button>
+  )
+}

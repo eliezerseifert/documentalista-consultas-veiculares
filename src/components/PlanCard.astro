@@ -1,0 +1,88 @@
+---
+// PlanCard.astro — Componente de Card de Opção de Consulta
+import Button from './Button.astro';
+
+interface Props {
+  id: string;
+  title: string;
+  description: string;
+  originalPrice?: string;
+  price?: string;
+  badge?: string;
+  featured?: boolean;
+  delay?: string;
+  buttonText?: string;
+  buttonVariant?: 'primary' | 'secondary' | 'accent' | 'outline' | 'ghost';
+  showDetailsLink?: boolean;
+  customPriceText?: string;
+  customSubtitle?: string;
+}
+
+const {
+  id,
+  title,
+  description,
+  originalPrice,
+  price,
+  badge,
+  featured = false,
+  delay = 'delay-100',
+  buttonText = 'COMPRAR CONSULTA',
+  buttonVariant = 'primary',
+  showDetailsLink = true,
+  customPriceText,
+  customSubtitle
+} = Astro.props;
+
+const borderClass = featured
+  ? 'border-2 border-emerald-500 shadow-lg shadow-emerald-500/10 hover:shadow-xl relative'
+  : 'border border-slate-200 shadow-sm hover:shadow-lg';
+---
+
+<div class={`bg-white p-7 rounded-2xl ${borderClass} flex flex-col justify-between transition-all scroll-reveal ${delay}`}>
+  <div>
+    <div class="flex items-center justify-between mb-3 min-h-[24px]">
+      {showDetailsLink ? (
+        <a href={`/detalhes/${id}`} class="text-xs font-bold text-[#3DB5B4] hover:text-[#124A6E] flex items-center gap-1 transition-colors">
+          Ver mais detalhes <span class="iconify w-3.5 h-3.5" data-icon="solar:arrow-right-linear"></span>
+        </a>
+      ) : (
+        <div></div>
+      )}
+      {badge && (
+        <span class="bg-emerald-100 text-emerald-800 text-[10px] font-mono-code font-bold uppercase px-3 py-0.5 rounded-full">
+          {badge}
+        </span>
+      )}
+    </div>
+
+    <h3 class="text-xl sm:text-2xl font-extrabold text-[#124A6E] mb-2">{title}</h3>
+    <p class="text-xs text-slate-600 leading-relaxed mb-6">
+      {description}
+    </p>
+
+    <div class="mb-6 pt-4 border-t border-slate-100">
+      {originalPrice && (
+        <p class="text-xs text-rose-500 font-semibold mb-0.5">
+          de <span class="line-through font-mono-code">{originalPrice}</span> por
+        </p>
+      )}
+      {price && (
+        <div class="flex items-baseline gap-1.5">
+          <span class="text-3xl sm:text-4xl font-extrabold text-emerald-600 font-mono-code">{price}</span>
+          <span class="text-emerald-600 text-xs font-bold font-mono-code">/consulta</span>
+        </div>
+      )}
+      {customSubtitle && (
+        <span class="text-xs font-bold text-emerald-600 font-mono-code uppercase block">{customSubtitle}</span>
+      )}
+      {customPriceText && (
+        <span class="text-2xl font-extrabold text-[#124A6E] font-mono-code">{customPriceText}</span>
+      )}
+    </div>
+  </div>
+
+  <Button onclick={`addToCart('${id}')`} variant={buttonVariant} size="md" fullWidth>
+    {buttonText}
+  </Button>
+</div>

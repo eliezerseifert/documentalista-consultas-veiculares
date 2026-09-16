@@ -1,0 +1,136 @@
+---
+// FeaturedPlanSection.astro — Componente da Seção "Descubra tudo o que nossa consulta completa oferece!"
+import Button from './Button.astro';
+
+const features = [
+  'Aceitação em seguro',
+  'Batidas & Sinistros',
+  'Custo médio de manutenção *',
+  'Dados cadastrais estaduais',
+  'Dados cadastrais nacionais',
+  'Dados de leilão',
+  'Débitos e multas',
+  'Decodificador de chassi',
+  'Ficha técnica completa',
+  'Fotos do lote de leilão *',
+  'Gráfico de preço FIPE',
+  'Gravame & Financiamento',
+  'Histórico de KM *',
+  'Histórico de manutenção *',
+  'Localizador de números *',
+  'Opinião do dono *',
+  'Precificador Tabela FIPE',
+  'Principais falhas do modelo',
+  'Peças originais & valores *',
+  'Recall pendente de fábrica',
+  'RENAJUD detalhe',
+  'Restrições e impedimentos',
+  'Risco de comercialização',
+  'Roubo e furto ativo',
+  'Score de leilão completo'
+];
+---
+
+<section id="detalhes-consulta" class="py-14 lg:py-20 bg-slate-50/70 border-y border-slate-200/60 relative">
+  <div class="max-w-[1400px] mx-auto px-6 lg:px-[6%]">
+    
+    <div class="text-center max-w-3xl mx-auto mb-10 scroll-reveal">
+      <h2 class="text-2xl sm:text-4xl font-bold text-[#124A6E] tracking-tight">
+        Descubra tudo o que nossa consulta completa oferece!
+      </h2>
+      <p class="text-sm text-slate-500 mt-2">
+        Mais de 25 checagens em um único relatório instantâneo com desconto exclusivo.
+      </p>
+    </div>
+
+    <!-- Card Principal Destaque -->
+    <div class="bg-white rounded-3xl border-2 border-[#124A6E] shadow-2xl overflow-hidden scroll-reveal">
+      
+      <!-- Header Banner do Card: Recomendado -->
+      <div class="bg-[#124A6E] text-white text-center py-2.5 px-4 font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2">
+        <span class="iconify text-[#3DB5B4] w-5 h-5" data-icon="solar:star-bold"></span>
+        Recomendado pelos Especialistas
+      </div>
+
+      <div class="p-6 sm:p-10">
+        
+        <!-- Linha de Topo: Título + Desconto Ticket -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-100">
+          <div>
+            <a href="/detalhes/veiculo-completo" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#3DB5B4] hover:text-[#124A6E] transition-colors mb-2">
+              Ver todos os detalhes deste relatório
+              <span class="iconify w-4 h-4" data-icon="solar:arrow-right-linear"></span>
+            </a>
+            <h3 class="text-2xl sm:text-3xl font-extrabold text-[#124A6E]">Veículo Completo</h3>
+            <p class="text-xs sm:text-sm font-semibold text-[#3DB5B4] mt-0.5">
+              + de 25 informações essenciais sobre seu veículo
+            </p>
+            
+            <!-- Prova Social no Header -->
+            <div class="flex items-center gap-3 mt-3">
+              <div class="flex -space-x-1.5 overflow-hidden">
+                <span class="inline-block h-6 w-6 rounded-full ring-2 ring-white bg-[#124A6E] text-white text-[9px] font-bold text-center leading-6">A</span>
+                <span class="inline-block h-6 w-6 rounded-full ring-2 ring-white bg-[#3DB5B4] text-white text-[9px] font-bold text-center leading-6">B</span>
+                <span class="inline-block h-6 w-6 rounded-full ring-2 ring-white bg-[#8BA3B5] text-white text-[9px] font-bold text-center leading-6">C</span>
+              </div>
+              <span class="text-xs text-slate-500 font-medium">+ de 500 mil veículos consultados com segurança.</span>
+            </div>
+          </div>
+
+          <!-- Ticket Cupom Desconto -->
+          <div class="ticket-coupon p-4 flex items-center gap-3.5 self-start lg:self-center shadow-sm">
+            <div class="w-10 h-10 rounded-full bg-[#3DB5B4]/20 text-[#3DB5B4] flex items-center justify-center flex-shrink-0">
+              <span class="iconify w-6 h-6" data-icon="solar:ticket-sale-bold"></span>
+            </div>
+            <div>
+              <p class="text-xs text-slate-600 font-medium">Compre agora e ganhe</p>
+              <p class="text-base font-extrabold text-emerald-600 font-mono-code">+15% DE DESCONTO</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Parágrafo de Copy -->
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed my-6 max-w-5xl">
+          Quer saber tudo sobre o veículo antes de comprar? Faça a consulta mais completa do mercado! Com ela, você valida dados cadastrais, descobre se o veículo já foi batido, roubado, se tem multas, débitos, passagem por leilão com fotos e muito mais. Não corra o risco de perder dinheiro com problemas ocultos!
+        </p>
+
+        <!-- Grid de 25 Informações Consultadas com Checkmarks Verdes -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 my-8 pt-2">
+          {features.map((feature) => (
+            <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+              <span class="iconify text-emerald-500 w-4 h-4 flex-shrink-0" data-icon="solar:check-circle-bold"></span>
+              <span>{feature}</span>
+            </div>
+          ))}
+        </div>
+
+        <p class="text-[11px] text-slate-400 mb-8 italic">
+          * Essas informações dependem da disponibilidade na base de dados dos nossos parceiros homologados.
+        </p>
+
+        <!-- Footer do Card: Preço com Destaque em Verde & Botão CTA -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t border-slate-100">
+          <div>
+            <p class="text-xs text-rose-500 font-semibold">
+              De <span class="line-through font-mono-code">R$ 69,90</span> por apenas:
+            </p>
+            <div class="flex items-baseline gap-2 mt-0.5">
+              <span class="text-4xl sm:text-5xl font-extrabold text-emerald-600 font-mono-code">R$ 49,90</span>
+              <span class="text-xs font-bold text-[#124A6E]">Por Consulta</span>
+              <span class="text-[11px] font-bold font-mono-code bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full uppercase ml-1">
+                OFF 28%
+              </span>
+            </div>
+          </div>
+
+          <Button onclick="addToCart('veiculo-completo')" variant="primary" size="lg" pulse icon="solar:arrow-right-linear" iconPosition="right" class="w-full sm:w-auto">
+            COMPRAR CONSULTA
+          </Button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>

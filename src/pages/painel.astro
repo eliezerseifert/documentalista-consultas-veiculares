@@ -1,0 +1,503 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+import { productsData } from '../data/products';
+---
+
+<Layout title="DOCUMENTALISTA CONSULTAS — Painel do Usuário | Minhas Consultas">
+  <main class="min-h-screen bg-slate-50/70 py-8 lg:py-12">
+    <div class="max-w-[1400px] mx-auto px-6 lg:px-[6%]">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- ========================================== -->
+        <!-- MENU LATERAL ESQUERDO (SIDEBAR) -->
+        <!-- ========================================== -->
+        <aside class="lg:col-span-3 bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-6">
+          
+          <!-- Box do Perfil do Usuário na Sidebar -->
+          <div class="flex items-center gap-3.5 pb-6 border-b border-slate-100">
+            <div class="w-12 h-12 rounded-2xl bg-[#124A6E] text-white flex items-center justify-center text-base font-extrabold font-mono-code shadow-md">
+              <span id="user-avatar-initials">US</span>
+            </div>
+            <div class="overflow-hidden">
+              <h3 id="user-sidebar-name" class="text-sm font-extrabold text-[#124A6E] truncate">
+                Usuário Documentalista
+              </h3>
+              <p id="user-sidebar-email" class="text-[11px] text-slate-400 font-mono-code truncate">
+                usuario@email.com
+              </p>
+            </div>
+          </div>
+
+          <!-- Links de Navegação do Painel -->
+          <nav class="space-y-1.5 font-semibold text-xs text-slate-600">
+            
+            <!-- 1. Dados do Usuário -->
+            <button 
+              type="button" 
+              onclick="switchDashboardTab('profile')" 
+              id="nav-tab-profile"
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left bg-[#3DB5B4]/15 text-[#124A6E] font-bold border border-[#3DB5B4]/30"
+            >
+              <span class="iconify w-5 h-5 text-[#3DB5B4]" data-icon="solar:user-bold"></span>
+              <span>Dados do Usuário</span>
+            </button>
+
+            <!-- 2. Minhas Assinaturas -->
+            <button 
+              type="button" 
+              onclick="switchDashboardTab('subscriptions')" 
+              id="nav-tab-subscriptions"
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left hover:bg-slate-50 hover:text-[#124A6E]"
+            >
+              <span class="iconify w-5 h-5 text-[#3DB5B4]" data-icon="solar:star-bold"></span>
+              <span>Minhas Assinaturas</span>
+            </button>
+
+            <!-- 3. Compras Realizadas -->
+            <button 
+              type="button" 
+              onclick="switchDashboardTab('orders')" 
+              id="nav-tab-orders"
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left hover:bg-slate-50 hover:text-[#124A6E]"
+            >
+              <span class="iconify w-5 h-5 text-[#3DB5B4]" data-icon="solar:bag-check-bold"></span>
+              <span>Compras Realizadas</span>
+            </button>
+
+            <!-- 4. Comprar Consultas (Catálogo) -->
+            <button 
+              type="button" 
+              onclick="switchDashboardTab('catalog')" 
+              id="nav-tab-catalog"
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left hover:bg-slate-50 hover:text-[#124A6E]"
+            >
+              <span class="iconify w-5 h-5 text-[#3DB5B4]" data-icon="solar:cart-large-bold"></span>
+              <span>Comprar Consultas</span>
+            </button>
+
+            <!-- 5. Fale com um Consultor (WhatsApp) -->
+            <a 
+              href="https://wa.me/5547991278324?text=Ol%C3%A1!%20Sou%20cliente%20do%20Documentalista%20e%20preciso%20de%20ajuda%20com%20minhas%20consultas." 
+              target="_blank"
+              rel="noopener"
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left text-emerald-700 bg-emerald-50 hover:bg-emerald-100 font-bold border border-emerald-200 block"
+            >
+              <span class="iconify w-5 h-5 text-emerald-600" data-icon="solar:chat-round-dots-bold"></span>
+              <span>Fale com um Consultor</span>
+            </a>
+
+            <!-- 6. Botão para Sair (Logout) -->
+            <button 
+              type="button" 
+              onclick="handleLogout()" 
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-rose-600 hover:bg-rose-50 transition-all text-left font-bold mt-4 border border-rose-100"
+            >
+              <span class="iconify w-5 h-5 text-rose-500" data-icon="solar:logout-bold"></span>
+              <span>Sair (Logout)</span>
+            </button>
+
+          </nav>
+
+        </aside>
+
+        <!-- ========================================== -->
+        <!-- ÁREA DE CONTEÚDO PRINCIPAL (DIREITA) -->
+        <!-- ========================================== -->
+        <main class="lg:col-span-9 bg-white rounded-3xl border border-slate-200 p-6 sm:p-10 shadow-sm">
+          
+          <!-- ABA 1: DADOS DO USUÁRIO -->
+          <div id="tab-content-profile" class="space-y-6">
+            <div class="flex items-center justify-between pb-6 border-b border-slate-100">
+              <div>
+                <span class="text-xs font-mono-code text-[#3DB5B4] font-bold uppercase tracking-wider">Meu Perfil</span>
+                <h2 class="text-2xl font-extrabold text-[#124A6E]">Dados do Usuário</h2>
+              </div>
+              <span class="text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 font-mono-code font-bold px-3 py-1 rounded-full">
+                CONTA VERIFICADA
+              </span>
+            </div>
+
+            <form onsubmit="event.preventDefault(); alert('Dados do perfil salvos com sucesso!');" class="space-y-4 max-w-xl">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Nome Completo</label>
+                <input 
+                  type="text" 
+                  id="profile-name-input" 
+                  class="w-full px-4 py-3 rounded-xl border border-slate-300 text-xs font-semibold focus:border-[#3DB5B4] focus:outline-none"
+                />
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">E-mail Cadastrado</label>
+                  <input 
+                    type="email" 
+                    id="profile-email-input" 
+                    readonly
+                    class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-mono-code text-slate-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">CPF</label>
+                  <input 
+                    type="text" 
+                    id="profile-cpf-input" 
+                    readonly
+                    class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-mono-code text-slate-500 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">WhatsApp / Telefone</label>
+                <input 
+                  type="text" 
+                  id="profile-phone-input" 
+                  class="w-full px-4 py-3 rounded-xl border border-slate-300 text-xs font-mono-code focus:border-[#3DB5B4] focus:outline-none"
+                />
+              </div>
+
+              <div class="pt-4">
+                <Button type="submit" variant="primary" size="md">
+                  Salvar Alterações
+                </Button>
+              </div>
+            </form>
+          </div>
+
+          <!-- ABA 2: MINHAS ASSINATURAS -->
+          <div id="tab-content-subscriptions" class="space-y-6 hidden">
+            <div class="pb-6 border-b border-slate-100">
+              <span class="text-xs font-mono-code text-[#3DB5B4] font-bold uppercase tracking-wider">Planos & Licenças</span>
+              <h2 class="text-2xl font-extrabold text-[#124A6E]">Minhas Assinaturas</h2>
+            </div>
+
+            <div class="bg-gradient-to-r from-[#124A6E] to-[#0e3c59] text-white p-6 sm:p-8 rounded-2xl shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+              <div>
+                <span class="text-[10px] font-mono-code bg-[#3DB5B4] text-[#124A6E] px-3 py-1 rounded-full font-bold uppercase tracking-wider">
+                  STATUS DA CONTA
+                </span>
+                <h3 class="text-xl sm:text-2xl font-extrabold mt-3">Conta Pessoal (Consultas Avulsas)</h3>
+                <p class="text-xs text-slate-200 mt-1 max-w-lg">
+                  Sua conta está ativa e pronta para realizar qualquer consulta veicular instantânea por placa.
+                </p>
+              </div>
+
+              <a 
+                href="/#planos" 
+                class="bg-[#3DB5B4] hover:bg-[#2ca1a0] text-white font-bold text-xs px-5 py-3 rounded-xl transition-all whitespace-nowrap shadow-md"
+              >
+                ASSINAR PLANO LOJISTA PRO
+              </a>
+            </div>
+          </div>
+
+          <!-- ABA 3: COMPRAS REALIZADAS -->
+          <div id="tab-content-orders" class="space-y-6 hidden">
+            <div class="flex items-center justify-between pb-6 border-b border-slate-100">
+              <div>
+                <span class="text-xs font-mono-code text-[#3DB5B4] font-bold uppercase tracking-wider">Histórico de Pedidos</span>
+                <h2 class="text-2xl font-extrabold text-[#124A6E]">Compras Realizadas</h2>
+              </div>
+              <span id="orders-count-badge" class="text-xs bg-slate-100 text-slate-700 font-mono-code font-bold px-3 py-1 rounded-full">
+                0 relatórios
+              </span>
+            </div>
+
+            <!-- Tabela de Compras Realizadas -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs text-slate-600">
+                <thead class="bg-slate-50 text-[#124A6E] font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                  <tr>
+                    <th class="py-3 px-4">Código / Data</th>
+                    <th class="py-3 px-4">Placa Consultada</th>
+                    <th class="py-3 px-4">Consulta</th>
+                    <th class="py-3 px-4">Valor</th>
+                    <th class="py-3 px-4">Status</th>
+                    <th class="py-3 px-4 text-right">Ação</th>
+                  </tr>
+                </thead>
+                <tbody id="orders-table-body" class="divide-y divide-slate-100">
+                  <!-- Inserido dinamicamente via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ABA 4: COMPRAR CONSULTAS (CATÁLOGO) -->
+          <div id="tab-content-catalog" class="space-y-6 hidden">
+            <div class="pb-6 border-b border-slate-100">
+              <span class="text-xs font-mono-code text-[#3DB5B4] font-bold uppercase tracking-wider">Catálogo Oficial</span>
+              <h2 class="text-2xl font-extrabold text-[#124A6E]">Comprar Novas Consultas</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {productsData.map(prod => (
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between hover:border-[#3DB5B4] transition-all">
+                  <div>
+                    <span class="text-[10px] font-mono-code text-[#3DB5B4] uppercase font-bold">{prod.category}</span>
+                    <h3 class="text-lg font-extrabold text-[#124A6E] mt-1 mb-2">{prod.title}</h3>
+                    <p class="text-xs text-slate-600 mb-4 leading-relaxed line-clamp-2">{prod.description}</p>
+                    <div class="flex items-baseline gap-2 mb-4">
+                      <span class="text-2xl font-extrabold text-emerald-600 font-mono-code">{prod.price}</span>
+                    </div>
+                  </div>
+
+                  <div class="flex gap-2">
+                    <a 
+                      href={`/detalhes/${prod.id}`}
+                      class="flex-1 py-2.5 px-3 bg-white text-[#124A6E] font-bold text-xs rounded-xl border border-slate-300 hover:bg-slate-100 transition-all text-center"
+                    >
+                      Detalhes
+                    </a>
+                    <button 
+                      type="button"
+                      onclick={`openCheckoutModal(); selectPlan('${prod.id}');`}
+                      class="flex-1 py-2.5 px-3 bg-[#3DB5B4] hover:bg-[#2ca1a0] text-white font-bold text-xs rounded-xl transition-all text-center"
+                    >
+                      Comprar
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </main>
+
+      </div>
+
+    </div>
+
+    <!-- Modal para Visualizar PDF da Consulta Comprada -->
+    <div 
+      id="dashboard-pdf-modal" 
+      class="fixed inset-0 z-[1000] bg-slate-900/80 backdrop-blur-md hidden flex items-center justify-center p-4 sm:p-6"
+    >
+      <div class="bg-white rounded-3xl w-full max-w-5xl h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200">
+        <div class="bg-[#124A6E] text-white px-6 py-4 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="iconify w-6 h-6 text-[#3DB5B4]" data-icon="solar:document-text-bold"></span>
+            <div>
+              <h3 id="modal-report-title" class="text-base font-bold leading-tight">Laudo de Consulta Veicular</h3>
+              <p id="modal-report-subtitle" class="text-xs text-slate-300 font-mono-code">Placa: ABC1D23</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5">
+            <button 
+              type="button" 
+              onclick="printDashboardPdf()" 
+              class="bg-white/15 hover:bg-white/25 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-all inline-flex items-center gap-1.5 border border-white/20"
+            >
+              <span class="iconify w-4 h-4" data-icon="solar:printer-bold"></span>
+              <span class="hidden sm:inline">Imprimir PDF</span>
+            </button>
+
+            <a 
+              href="/pdf/consulta-modelo.pdf" 
+              download="relatorio-consulta.pdf" 
+              target="_blank"
+              class="bg-[#3DB5B4] hover:bg-[#2ca1a0] text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-colors inline-flex items-center gap-1.5 shadow-sm"
+            >
+              <span class="iconify w-4 h-4" data-icon="solar:download-minimalistic-bold"></span>
+              <span class="hidden sm:inline">Baixar PDF</span>
+            </a>
+
+            <button 
+              type="button" 
+              onclick="closeDashboardPdfModal()" 
+              class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors focus:outline-none"
+              aria-label="Fechar Modal"
+            >
+              <span class="iconify w-5 h-5" data-icon="solar:close-circle-bold"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex-1 bg-slate-100 p-2 sm:p-4">
+          <iframe 
+            id="dashboard-pdf-iframe"
+            src="/pdf/consulta-modelo.pdf" 
+            class="w-full h-full rounded-2xl border border-slate-200 bg-white"
+            title="Relatório Veicular PDF"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</Layout>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    loadUserData();
+    loadOrdersHistory();
+
+    // Direciona por padrão para a aba 'orders' (Compras Realizadas)
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetTab = urlParams.get('tab') || 'orders';
+    switchDashboardTab(targetTab);
+  });
+
+  function loadUserData() {
+    const rawUser = localStorage.getItem('documentalista_user');
+    const user = rawUser ? JSON.parse(rawUser) : {
+      name: 'CLIENTE DOCUMENTALISTA',
+      email: 'cliente@documentalista.com.br',
+      cpf: '123.456.789-00',
+      phone: '(31) 99999-8888'
+    };
+
+    // Atualiza Sidebar
+    const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'US';
+    document.getElementById('user-avatar-initials').textContent = initials;
+    document.getElementById('user-sidebar-name').textContent = user.name;
+    document.getElementById('user-sidebar-email').textContent = user.email;
+
+    // Atualiza Form do Perfil
+    document.getElementById('profile-name-input').value = user.name || '';
+    document.getElementById('profile-email-input').value = user.email || '';
+    document.getElementById('profile-cpf-input').value = user.cpf || '';
+    document.getElementById('profile-phone-input').value = user.phone || '';
+  }
+
+  function loadOrdersHistory() {
+    const rawPurchases = localStorage.getItem('documentalista_purchases');
+    let purchases = rawPurchases ? JSON.parse(rawPurchases) : [];
+
+    // Se não tiver compras registradas, insere uma compra demonstrativa
+    if (purchases.length === 0) {
+      purchases = [
+        {
+          id: 'DOC-982145',
+          plate: 'FXB0B30',
+          title: 'Veículo Completo',
+          date: new Date().toLocaleDateString('pt-BR'),
+          price: 'R$ 39,90',
+          method: 'Pix Instantâneo',
+          status: 'Concluído'
+        }
+      ];
+      localStorage.setItem('documentalista_purchases', JSON.stringify(purchases));
+    }
+
+    const countBadge = document.getElementById('orders-count-badge');
+    if (countBadge) countBadge.textContent = `${purchases.length} relatórios`;
+
+    const tbody = document.getElementById('orders-table-body');
+    if (!tbody) return;
+
+    let html = '';
+    purchases.forEach(p => {
+      html += `
+        <tr class="hover:bg-slate-50/80 transition-colors">
+          <td class="py-3.5 px-4 font-mono-code font-bold text-[#124A6E]">
+            ${p.id}<br/>
+            <span class="text-[10px] text-slate-400 font-normal">${p.date}</span>
+          </td>
+          <td class="py-3.5 px-4">
+            <span class="bg-slate-100 text-[#124A6E] font-mono-code font-bold px-2 py-0.5 rounded border border-slate-200">
+              ${p.plate}
+            </span>
+          </td>
+          <td class="py-3.5 px-4 font-bold text-[#124A6E]">
+            ${p.title}<br/>
+            <span class="text-[10px] text-slate-400 font-normal">${p.method}</span>
+          </td>
+          <td class="py-3.5 px-4 font-mono-code font-bold text-emerald-600">
+            ${p.price}
+          </td>
+          <td class="py-3.5 px-4">
+            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-mono-code font-bold uppercase px-2.5 py-0.5 rounded-full">
+              ${p.status}
+            </span>
+          </td>
+          <td class="py-3.5 px-4 text-right">
+            <div class="inline-flex items-center gap-2 justify-end">
+              <button 
+                type="button" 
+                onclick="openDashboardPdfModal('${p.title}', '${p.plate}'); setTimeout(printDashboardPdf, 400);"
+                class="inline-flex items-center gap-1 bg-slate-100 hover:bg-slate-200 text-[#124A6E] font-bold text-[11px] px-2.5 py-1.5 rounded-lg transition-colors border border-slate-200"
+                title="Imprimir PDF"
+              >
+                <span class="iconify text-[#3DB5B4]" data-icon="solar:printer-bold"></span>
+                Imprimir
+              </button>
+
+              <button 
+                type="button" 
+                onclick="openDashboardPdfModal('${p.title}', '${p.plate}')"
+                class="inline-flex items-center gap-1 bg-[#124A6E] hover:bg-[#3DB5B4] text-white font-bold text-[11px] px-3 py-1.5 rounded-lg transition-colors"
+              >
+                <span class="iconify text-[#3DB5B4]" data-icon="solar:document-text-bold"></span>
+                Ver / Baixar PDF
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    });
+
+    tbody.innerHTML = html;
+  }
+
+  function switchDashboardTab(tabName) {
+    const tabs = ['profile', 'subscriptions', 'orders', 'catalog'];
+    tabs.forEach(t => {
+      const content = document.getElementById(`tab-content-${t}`);
+      const navBtn = document.getElementById(`nav-tab-${t}`);
+      
+      if (t === tabName) {
+        if (content) content.classList.remove('hidden');
+        if (navBtn) {
+          navBtn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left bg-[#3DB5B4]/15 text-[#124A6E] font-bold border border-[#3DB5B4]/30";
+        }
+      } else {
+        if (content) content.classList.add('hidden');
+        if (navBtn) {
+          navBtn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left hover:bg-slate-50 hover:text-[#124A6E]";
+        }
+      }
+    });
+  }
+
+  function openDashboardPdfModal(title, plate) {
+    document.getElementById('modal-report-title').textContent = title || 'Laudo de Consulta Veicular';
+    document.getElementById('modal-report-subtitle').textContent = `Placa: ${plate || 'FXB0B30'}`;
+    const modal = document.getElementById('dashboard-pdf-modal');
+    if (modal) modal.classList.remove('hidden');
+  }
+
+  function closeDashboardPdfModal() {
+    const modal = document.getElementById('dashboard-pdf-modal');
+    if (modal) modal.classList.add('hidden');
+  }
+
+  function printDashboardPdf() {
+    const iframe = document.getElementById('dashboard-pdf-iframe');
+    if (iframe && iframe.contentWindow) {
+      try {
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+      } catch (err) {
+        window.open('/pdf/consulta-modelo.pdf', '_blank');
+      }
+    } else {
+      window.print();
+    }
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('documentalista_user');
+    window.location.href = '/';
+  }
+
+  window.switchDashboardTab = switchDashboardTab;
+  window.openDashboardPdfModal = openDashboardPdfModal;
+  window.closeDashboardPdfModal = closeDashboardPdfModal;
+  window.printDashboardPdf = printDashboardPdf;
+  window.handleLogout = handleLogout;
+</script>

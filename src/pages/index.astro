@@ -1,11 +1,1236 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+import PlanCard from '../components/PlanCard.astro';
+import FeaturedPlanSection from '../components/FeaturedPlanSection.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const plans = [
+  {
+    id: 'veiculo-completo',
+    title: 'Veículo Completo',
+    description: 'A consulta mais completa do mercado, com informações e dados exclusivos, que só o Documentalista tem!',
+    originalPrice: 'R$ 69,90',
+    price: 'R$ 49,90',
+    badge: 'Popular',
+    featured: true,
+    delay: 'delay-100'
+  },
+  {
+    id: 'veiculo-essencial',
+    title: 'Veículo Essencial',
+    description: 'Informações essenciais sobre o veículo, que te ajudam a negociar com mais segurança e acertar na escolha do seu próximo carro.',
+    originalPrice: 'R$ 52,90',
+    price: 'R$ 39,90',
+    delay: 'delay-200'
+  },
+  {
+    id: 'leilao-dados',
+    title: 'Leilão + Dados do Veículo',
+    description: 'Informações sobre o veículo de leilão, que te ajudam a negociar o melhor valor e evitar prejuízos!',
+    originalPrice: 'R$ 34,90',
+    price: 'R$ 21,90',
+    delay: 'delay-300'
+  }
+];
 ---
 
 <Layout>
-	<Welcome />
+  <main>
+    <!-- ========================================== -->
+    <!-- 2) HERO SECTION (PRIMEIRA DOBRA) -->
+    <!-- ========================================== -->
+    <section id="hero-form" class="relative z-10 w-full pt-10 pb-16 lg:py-24 overflow-hidden bg-[#0F2D3E]">
+      <!-- 1. VÍDEO BACKGROUND EM LOOP -->
+      <video 
+        id="hero-video"
+        autoplay 
+        loop 
+        muted 
+        playsinline 
+        preload="metadata"
+        class="absolute inset-0 w-full h-full object-cover opacity-50 z-0 pointer-events-none"
+      >
+        <source src="/images/Men_discussing_vehicle_history_t…_20260915190222.mp4" type="video/mp4" />
+      </video>
+
+      <!-- 2. OVERLAY COM DEGRADÊ PROFISSIONAL DA IDENTIDADE VISUAL (#3FB39D -> #1F6790) -->
+      <div 
+        class="absolute inset-0 z-[1] pointer-events-none"
+        style="background: linear-gradient(120deg, rgba(63, 179, 157, 0.80), rgba(31, 103, 144, 0.80));"
+      ></div>
+
+      <!-- 3. FADE PROGRESSIVO DA HERO PARA BRANCO NO RODAPÉ DA DOBRA (#FFFFFF) -->
+      <div 
+        class="absolute inset-x-0 bottom-0 h-44 sm:h-60 z-[2] pointer-events-none"
+        style="background: linear-gradient(to bottom, transparent 25%, rgba(255, 255, 255, 0.5) 70%, rgba(255, 255, 255, 0.9) 88%, #FFFFFF 100%);"
+      ></div>
+
+      <div class="max-w-[1400px] mx-auto px-6 lg:px-[6%] relative z-10">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          <!-- Coluna Esquerda: Copywriting de Conversão (CRO) -->
+          <div class="lg:col-span-7 flex flex-col justify-center">
+            
+            <!-- Badge de Prova e Status Live -->
+            <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/15 border border-white/25 text-white text-[11px] font-bold uppercase tracking-widest mb-6 w-max animate-reveal delay-100 shadow-sm backdrop-blur-sm">
+              <span class="relative flex h-2.5 w-2.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+              </span>
+              +500 Mil Consultas Realizadas • Base Denatran & Leilões
+            </div>
+
+            <!-- Headline Principal Orientada a Risco/Prejuízo -->
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.25rem] font-extrabold leading-[1.1] tracking-tight text-white animate-reveal delay-100 drop-shadow-sm">
+              Evite Golpes e Prejuízos de até <span class="text-emerald-300 font-extrabold">R$ 50 mil</span> ao Comprar um Carro Usado
+            </h1>
+
+            <!-- Subheadline Descritiva -->
+            <p class="text-base lg:text-lg text-slate-100 font-normal leading-relaxed mt-5 max-w-2xl animate-reveal delay-200 text-shadow-sm">
+              Saiba a verdade sobre o veículo antes de pagar o sinal. Verifique histórico de <strong class="text-white font-semibold">sinistro (batidas)</strong>, <strong class="text-white font-semibold">leilão com fotos</strong>, roubo/furto, restrições, gravame e débitos apenas digitando a placa.
+            </p>
+
+            <!-- Badges de Benefícios Rápidos -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-8 animate-reveal delay-300">
+              <div class="flex items-center gap-2 bg-white/15 backdrop-blur-md p-2.5 rounded-lg border border-white/20 text-white">
+                <span class="iconify w-5 h-5 text-emerald-300 flex-shrink-0" data-icon="solar:shield-check-bold"></span>
+                <span class="text-xs font-semibold">Relatório 100% Seguro</span>
+              </div>
+              <div class="flex items-center gap-2 bg-white/15 backdrop-blur-md p-2.5 rounded-lg border border-white/20 text-white">
+                <span class="iconify w-5 h-5 text-emerald-300 flex-shrink-0" data-icon="solar:bolt-bold"></span>
+                <span class="text-xs font-semibold">Resultado Instantâneo</span>
+              </div>
+              <div class="flex items-center gap-2 bg-white/15 backdrop-blur-md p-2.5 rounded-lg border border-white/20 text-white col-span-2 sm:col-span-1">
+                <span class="iconify w-5 h-5 text-emerald-300 flex-shrink-0" data-icon="solar:camera-minimalistic-bold"></span>
+                <span class="text-xs font-semibold">Fotos de Leilão</span>
+              </div>
+            </div>
+
+            <!-- Micro Prova Social na Hero & Selo '+10 anos de experiência' ao lado das avaliações -->
+            <div class="flex flex-wrap items-center gap-4 sm:gap-5 mt-8 pt-6 border-t border-white/20 animate-reveal delay-400">
+              <div class="flex items-center gap-3">
+                <div class="flex -space-x-2 overflow-hidden">
+                  <span class="inline-block h-8 w-8 rounded-full ring-2 ring-white/50 bg-[#124A6E] text-white text-xs font-bold text-center leading-8">RM</span>
+                  <span class="inline-block h-8 w-8 rounded-full ring-2 ring-white/50 bg-[#3DB5B4] text-white text-xs font-bold text-center leading-8">JK</span>
+                  <span class="inline-block h-8 w-8 rounded-full ring-2 ring-white/50 bg-[#8BA3B5] text-white text-xs font-bold text-center leading-8">CE</span>
+                </div>
+                <div>
+                  <div class="flex text-amber-300 text-xs items-center">
+                    <span class="iconify" data-icon="solar:star-bold"></span>
+                    <span class="iconify" data-icon="solar:star-bold"></span>
+                    <span class="iconify" data-icon="solar:star-bold"></span>
+                    <span class="iconify" data-icon="solar:star-bold"></span>
+                    <span class="iconify" data-icon="solar:star-bold"></span>
+                    <span class="text-white font-bold ml-1.5 text-xs">4.9/5.0</span>
+                  </div>
+                  <p class="text-xs text-slate-100">Mais de 150.000 compradores protegidos contra fraudes.</p>
+                </div>
+              </div>
+
+              <!-- Separador discreto para telas médias/grandes -->
+              <div class="hidden sm:block w-px h-8 bg-white/20"></div>
+
+              <!-- Selo ao Lado das Avaliações (em 2 linhas com fundo escuro e alto contraste) -->
+              <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl bg-[#081F2E] border border-amber-400/60 shadow-lg backdrop-blur-md">
+                <span class="iconify w-5 h-5 text-amber-400 flex-shrink-0" data-icon="solar:verified-check-bold"></span>
+                <div class="text-[11px] font-extrabold leading-tight tracking-wide text-amber-300">
+                  <span class="block">+10 anos de</span>
+                  <span class="block">experiência</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Coluna Direita: Card Interativo da Placa de Carro (Formulário CRO) -->
+          <div class="lg:col-span-5 animate-reveal delay-200">
+            <div class="bg-white/95 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-2xl shadow-slate-300/40 relative z-10">
+              
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-xs font-mono-code text-[#3DB5B4] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-[#3DB5B4] animate-ping"></span>
+                  Consulta de Placa Online
+                </span>
+                <span class="text-[11px] font-mono-code bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full font-bold">
+                  PRÉVIA GRÁTIS
+                </span>
+              </div>
+
+              <h3 class="text-xl font-bold text-[#124A6E] mb-2">Digite a placa para consultar</h3>
+              <p class="text-xs text-slate-500 mb-6">Aceita padrão Mercosul (ex: ABC1D23) e Antigo (ex: ABC-1234).</p>
+
+              <!-- Box da Placa com Visual do Padrão Mercosul -->
+              <form id="vehicle-plate-form" onsubmit="handlePlateSearch(event)" class="space-y-4">
+                
+                <div class="plate-input-container">
+                  <div class="plate-header-mercosul">
+                    <span>BRASIL</span>
+                    <span class="iconify w-4 h-3" data-icon="flag:br-4x3"></span>
+                  </div>
+                  <div class="p-3 bg-white flex items-center">
+                    <input type="text" 
+                           id="plate-input" 
+                           maxlength="8" 
+                           placeholder="ABC1D23" 
+                           required
+                           class="w-full text-center text-3xl sm:text-4xl font-mono-code font-bold uppercase text-[#124A6E] tracking-widest focus:outline-none placeholder:text-slate-300"
+                           oninput="formatPlateInput(this)"/>
+                  </div>
+                </div>
+
+                <!-- Mensagem de Erro do Input -->
+                <div id="plate-error" class="hidden text-xs text-rose-600 font-semibold flex items-center gap-1">
+                  <span class="iconify w-4 h-4" data-icon="solar:danger-circle-bold"></span>
+                  Por favor, digite uma placa válida no formato ABC1D23 ou ABC-1234.
+                </div>
+
+                <!-- Âncora de Preço Transparente (Valores em Verde Destaque) -->
+                <div class="flex items-center justify-between bg-slate-50 p-3.5 rounded-xl border border-slate-200/70 text-xs">
+                  <span class="text-slate-600 font-medium">Relatório completo a partir de:</span>
+                  <span class="text-base font-extrabold text-emerald-600 font-mono-code">R$ 21,90</span>
+                </div>
+
+                <!-- Botão Principal de Conversão -->
+                <Button type="submit" id="search-btn" variant="primary" size="lg" fullWidth pulse icon="solar:magnifier-linear">
+                  Ver Histórico Deste Carro
+                </Button>
+              </form>
+
+              <!-- Selos de Confiança e Segurança abaixo do CTA -->
+              <div class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-around text-slate-400 text-[11px] font-mono-code">
+                <span class="flex items-center gap-1"><span class="iconify text-[#3DB5B4]" data-icon="solar:lock-keyhole-minimalistic-bold"></span> SSL 256-bit</span>
+                <span class="flex items-center gap-1"><span class="iconify text-[#3DB5B4]" data-icon="solar:shield-check-bold"></span> LGPD OK</span>
+                <span class="flex items-center gap-1"><span class="iconify text-[#3DB5B4]" data-icon="solar:card-bold"></span> Pix / Cartão</span>
+              </div>
+
+              <!-- Disclaimer de órgãos públicos -->
+              <p class="text-[10px] text-slate-400 text-center mt-3">
+                * O Documentalista é um serviço privado. Não possui vínculo direto com o Detran/Denatran.
+              </p>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 2.5) SEÇÃO TUDO O QUE OFERECEMOS + DESCONTO + VALORES EM VERDE DESTAQUE -->
+    <!-- ========================================== -->
+    <FeaturedPlanSection />
+
+    <!-- ========================================== -->
+    <!-- 2.7) OPÇÕES DE CONSULTA (CARDS GRID) -->
+    <!-- ========================================== -->
+    <section id="planos" class="py-16 lg:py-24 bg-slate-50/70 border-t border-slate-200/60 relative scroll-mt-24">
+      <div class="max-w-[1400px] mx-auto px-6 lg:px-[6%]">
+        
+        <div class="text-center max-w-2xl mx-auto mb-16 scroll-reveal">
+          <span class="ds-label">Opções de Consulta</span>
+          <h2 class="text-3xl lg:text-4xl font-bold text-[#124A6E] tracking-tight">
+            Escolha a consulta perfeita para o seu veículo
+          </h2>
+          <p class="text-sm text-slate-500 mt-3">
+            Relatórios avulsos sob medida com preço com desconto em destaque.
+          </p>
+        </div>
+
+        <!-- Grid de 6 Cards (Modularizado via Componente PlanCard) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {plans.map((plan) => (
+            <PlanCard {...plan} />
+          ))}
+        </div>
+
+        <!-- Banner Especial para Lojistas e Despachantes -->
+        <div class="mt-12 bg-gradient-to-r from-[#124A6E] to-[#0e3c59] p-8 sm:p-10 rounded-3xl text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 scroll-reveal">
+          <div>
+            <span class="text-[10px] font-mono-code bg-[#3DB5B4] text-[#124A6E] px-3 py-1 rounded-full font-bold uppercase tracking-wider">
+              Para Lojistas & Despachantes
+            </span>
+            <h3 class="text-2xl sm:text-3xl font-extrabold mt-3 mb-2">Plano Lojista Pro (Consultas em Lote)</h3>
+            <p class="text-xs sm:text-sm text-slate-200 max-w-2xl">
+              Sua loja consulta veículos todos os dias? Assine nosso plano corporativo por apenas <strong class="text-emerald-400 font-mono-code text-base">R$ 99,90/mês</strong> e tenha desconto exclusivo em todas as consultas Master!
+            </p>
+          </div>
+          <Button onclick="addToCart('lojista')" variant="secondary" size="md" class="whitespace-nowrap flex-shrink-0">
+            ASSINAR PLANO LOJISTA PRO
+          </Button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 3) PROVA SOCIAL COM RESULTADO NUMÉRICO -->
+    <!-- ========================================== -->
+    <section class="py-14 bg-white border-b border-slate-200/60 relative">
+      <div class="max-w-[1400px] mx-auto px-6 lg:px-[6%]">
+        
+        <div class="text-center max-w-2xl mx-auto mb-10 scroll-reveal">
+          <span class="ds-label">Depoimentos Verificados</span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-[#124A6E] tracking-tight">
+            Quem consultou antes de comprar, economizou de verdade
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Depoimento 1 -->
+          <div class="bg-slate-50 p-7 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all scroll-reveal delay-100 flex flex-col justify-between">
+            <div>
+              <div class="flex gap-1 text-amber-400 mb-3">
+                <span class="iconify w-4 h-4" data-icon="solar:star-bold"></span>
+                <span class="iconify w-4 h-4" data-icon="solar:star-bold"></span>
+                <span class="iconify w-4 h-4" data-icon="solar:star-bold"></span>
+                <span class="iconify w-4 h-4" data-icon="solar:star-bold"></span>
+                <span class="iconify w-4 h-4" data-icon="solar:star-bold"></span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                "Estava prestes a dar R$ 55 mil num SUV aparentemente impecável. A consulta no Documentalista revelou <strong class="text-[#124A6E]">sinistro de R$ 32 mil por colisão frontal</strong>. O vendedor não havia contado. Economizei uma fortuna!"
+              </p>
+            </div>
+            <div class="flex items-center gap-3 border-t border-slate-200/60 pt-4 mt-2">
+              <div class="w-9 h-9 rounded-full bg-[#124A6E] text-white flex items-center justify-center text-xs font-bold font-mono-code">
+                RM
+              </div>
+              <div>
+                <p class="text-xs font-bold text-[#124A6E]">Ricardo M.</p>
+                <p class="text-[10px] text-slate-400">São Paulo / SP • Economizou R$ 32.000</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Depoimento 2 -->
+          <div class="bg-slate-50 p-7 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all scroll-reveal delay-200 flex flex-col justify-between">
+            <div>
+              <div class="flex gap-1 text-amber-400 mb-3">
+                <span class="iconify w-4 h-4" data-icon="solar:star-bold"></span>
+                <span class="iconify w-4 h-4" data-icon="solar:star-bold"></span>
+                <span class="iconify w-4 h-4" data-icon="solar:star-bold"></span>
+                <span class="iconify w-4 h-4" data-icon="solar:star-bold"></span>
+                <span class="iconify w-4 h-4" data-icon="solar:star-bold"></span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                "Ia comprar um Hatch seminovo. Ao puxar a placa, vi as <strong class="text-[#124A6E]">fotos do leilão com a lateral destruída</strong> e restrição financeira de gravame. O relatório me livrou de uma enorme dor de cabeça."
+              </p>
+            </div>
+            <div class="flex items-center gap-3 border-t border-slate-200/60 pt-4 mt-2">
+              <div class="w-9 h-9 rounded-full bg-[#3DB5B4] text-white flex items-center justify-center text-xs font-bold font-mono-code">
+                JK
+              </div>
+              <div>
+                <p class="text-xs font-bold text-[#124A6E]">Juliana K.</p>
+                <p class="text-[10px] text-slate-400">Curitiba / PR • Evitou golpe de leilão</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Depoimento 3 -->
+          <div class="bg-slate-50 p-7 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all scroll-reveal delay-300 flex flex-col justify-between">
+            <div>
+              <div class="flex gap-1 text-amber-400 mb-3">
+                <span class="iconify w-4 h-4" data-icon="solar:star-bold"></span>
+                <span class="iconify w-4 h-4" data-icon="solar:star-bold"></span>
+                <span class="iconify w-4 h-4" data-icon="solar:star-bold"></span>
+                <span class="iconify w-4 h-4" data-icon="solar:star-bold"></span>
+                <span class="iconify w-4 h-4" data-icon="solar:star-bold"></span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                "Trabalho com revenda de seminovos. Faço o relatório do Documentalista para todos os carros do estoque e entrego impresso ao cliente. Passa 100% de confiança e acelera o fechamento!"
+              </p>
+            </div>
+            <div class="flex items-center gap-3 border-t border-slate-200/60 pt-4 mt-2">
+              <div class="w-9 h-9 rounded-full bg-[#8BA3B5] text-white flex items-center justify-center text-xs font-bold font-mono-code">
+                CE
+              </div>
+              <div>
+                <p class="text-xs font-bold text-[#124A6E]">Carlos E.</p>
+                <p class="text-[10px] text-slate-400">Belo Horizonte / MG • Lojista parceiro</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 4) COMO FUNCIONA (3 PASSOS SIMPLES) -->
+    <!-- ========================================== -->
+    <section id="como-funciona" class="py-16 lg:py-24 bg-slate-50/50 relative scroll-mt-24">
+      <div class="max-w-[1400px] mx-auto px-6 lg:px-[6%]">
+        
+        <div class="text-center max-w-2xl mx-auto mb-16 scroll-reveal">
+          <span class="ds-label">Passo a Passo</span>
+          <h2 class="text-3xl lg:text-4xl font-bold text-[#124A6E] tracking-tight">
+            Como consultar o histórico do carro em 3 minutos
+          </h2>
+          <p class="text-sm text-slate-500 mt-3">
+            Processo 100% digital, sem burocracia e com entrega imediata na tela e no seu WhatsApp.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+          
+          <!-- Passo 1 -->
+          <div class="bg-white p-8 rounded-2xl border border-slate-200/80 relative group hover:border-[#3DB5B4] transition-all scroll-reveal delay-100 shadow-sm">
+            <div class="w-12 h-12 bg-[#124A6E] text-white rounded-full flex items-center justify-center font-mono-code font-bold text-lg mb-6 shadow-md">
+              1
+            </div>
+            <h3 class="text-lg font-bold text-[#124A6E] mb-2">Digite a Placa</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Informe a placa do veículo no campo de busca no topo da página. Aceitamos padrão antigo e Mercosul.
+            </p>
+          </div>
+
+          <!-- Passo 2 -->
+          <div class="bg-white p-8 rounded-2xl border border-slate-200/80 relative group hover:border-[#3DB5B4] transition-all scroll-reveal delay-200 shadow-sm">
+            <div class="w-12 h-12 bg-[#3DB5B4] text-white rounded-full flex items-center justify-center font-mono-code font-bold text-lg mb-6 shadow-md">
+              2
+            </div>
+            <h3 class="text-lg font-bold text-[#124A6E] mb-2">Confira a Prévia Grátis</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              O sistema valida os dados do modelo e ano do veículo instantaneamente para garantir que você consulte o carro certo.
+            </p>
+          </div>
+
+          <!-- Passo 3 -->
+          <div class="bg-white p-8 rounded-2xl border border-slate-200/80 relative group hover:border-[#3DB5B4] transition-all scroll-reveal delay-300 shadow-sm">
+            <div class="w-12 h-12 bg-[#8BA3B5] text-white rounded-full flex items-center justify-center font-mono-code font-bold text-lg mb-6 shadow-md">
+              3
+            </div>
+            <h3 class="text-lg font-bold text-[#124A6E] mb-2">Receba o Laudo Completo</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Após a confirmação via Pix ou cartão, o relatório completo fica disponível imediatamente em PDF e no seu e-mail.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 7) GARANTIA E SEGURANÇA -->
+    <!-- ========================================== -->
+    <section id="garantia" class="py-16 bg-white border-y border-slate-200/60 relative">
+      <div class="max-w-[1200px] mx-auto px-6 lg:px-[6%]">
+        
+        <div class="bg-slate-50 p-8 sm:p-12 rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-center gap-8 justify-between scroll-reveal">
+          
+          <div class="flex items-center gap-6">
+            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-[#3DB5B4]/15 text-[#3DB5B4] flex-shrink-0 flex items-center justify-center">
+              <span class="iconify w-12 h-12" data-icon="solar:verified-check-bold"></span>
+            </div>
+            <div>
+              <span class="text-xs font-mono-code text-[#3DB5B4] font-bold uppercase tracking-wider">Compromisso de Qualidade</span>
+              <h3 class="text-2xl font-bold text-[#124A6E] mt-1 mb-2">Garantia de Devolução 100%</h3>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-xl">
+                Se por qualquer motivo técnico o relatório não for gerado ou houver inconsistência comprovada nas informações do veículo, nós devolvemos o valor da sua consulta sem complicações.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row md:flex-col gap-3 flex-shrink-0 w-full md:w-auto">
+            <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 bg-white p-3 rounded-xl border border-slate-200">
+              <span class="iconify text-[#3DB5B4] w-5 h-5" data-icon="solar:shield-up-linear"></span>
+              Criptografia SSL de 256 bits
+            </div>
+            <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 bg-white p-3 rounded-xl border border-slate-200">
+              <span class="iconify text-[#3DB5B4] w-5 h-5" data-icon="solar:qr-code-bold"></span>
+              Pix Instantâneo Liberado
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 8) FAQ ACCORDION (TRATAMENTO DE OBJEÇÕES) -->
+    <!-- ========================================== -->
+    <section id="faq" class="py-16 lg:py-24 bg-slate-50/50 relative">
+      <div class="max-w-[1000px] mx-auto px-6 lg:px-[6%]">
+        
+        <div class="text-center max-w-2xl mx-auto mb-16 scroll-reveal">
+          <span class="ds-label">Perguntas Frequentes</span>
+          <h2 class="text-3xl lg:text-4xl font-bold text-[#124A6E] tracking-tight">
+            Tire suas dúvidas antes de consultar
+          </h2>
+        </div>
+
+        <div class="space-y-4">
+          
+          <!-- Pergunta 1 -->
+          <div class="border border-slate-200 rounded-2xl bg-white overflow-hidden scroll-reveal">
+            <button onclick="toggleFaq(this)" class="w-full p-6 text-left flex items-center justify-between font-bold text-[#124A6E] text-base hover:bg-slate-50 transition-colors">
+              <span>Quanto tempo demora para o relatório ficar pronto?</span>
+              <span class="iconify w-5 h-5 text-[#3DB5B4] transform transition-transform duration-300" data-icon="solar:alt-arrow-down-linear"></span>
+            </button>
+            <div class="px-6 pb-6 text-xs sm:text-sm text-slate-600 leading-relaxed hidden">
+              O resultado é instantâneo! Assim que o pagamento via Pix ou Cartão de Crédito é confirmado, o relatório é gerado automaticamente na sua tela e também enviado em PDF para o seu e-mail e WhatsApp cadastrado.
+            </div>
+          </div>
+
+          <!-- Pergunta 2 -->
+          <div class="border border-slate-200 rounded-2xl bg-white overflow-hidden scroll-reveal">
+            <button onclick="toggleFaq(this)" class="w-full p-6 text-left flex items-center justify-between font-bold text-[#124A6E] text-base hover:bg-slate-50 transition-colors">
+              <span>A consulta funciona para motos, caminhões e ônibus?</span>
+              <span class="iconify w-5 h-5 text-[#3DB5B4] transform transition-transform duration-300" data-icon="solar:alt-arrow-down-linear"></span>
+            </button>
+            <div class="px-6 pb-6 text-xs sm:text-sm text-slate-600 leading-relaxed hidden">
+              Sim! Nosso banco de dados abrange todos os veículos automotores registrados no Brasil (carros, motos, caminhões, reboques e utilitários).
+            </div>
+          </div>
+
+          <!-- Pergunta 3 -->
+          <div class="border border-slate-200 rounded-2xl bg-white overflow-hidden scroll-reveal">
+            <button onclick="toggleFaq(this)" class="w-full p-6 text-left flex items-center justify-between font-bold text-[#124A6E] text-base hover:bg-slate-50 transition-colors">
+              <span>O Documentalista possui vínculo com o Detran ou Governo?</span>
+              <span class="iconify w-5 h-5 text-[#3DB5B4] transform transition-transform duration-300" data-icon="solar:alt-arrow-down-linear"></span>
+            </button>
+            <div class="px-6 pb-6 text-xs sm:text-sm text-slate-600 leading-relaxed hidden">
+              Não. Somos uma empresa privada especializada em inteligência de dados veiculares. Nossas consultas são obtidas através de parcerias homologadas com seguradoras, leiloeiros e órgãos de trânsito regulamentados.
+            </div>
+          </div>
+
+          <!-- Pergunta 4 -->
+          <div class="border border-slate-200 rounded-2xl bg-white overflow-hidden scroll-reveal">
+            <button onclick="toggleFaq(this)" class="w-full p-6 text-left flex items-center justify-between font-bold text-[#124A6E] text-base hover:bg-slate-50 transition-colors">
+              <span>Quais são as formas de pagamento aceitas?</span>
+              <span class="iconify w-5 h-5 text-[#3DB5B4] transform transition-transform duration-300" data-icon="solar:alt-arrow-down-linear"></span>
+            </button>
+            <div class="px-6 pb-6 text-xs sm:text-sm text-slate-600 leading-relaxed hidden">
+              Aceitamos Pix (com aprovação imediata em menos de 5 segundos), Cartão de Crédito em até 12x e Boleto Bancário. Recomendamos o Pix para liberação na hora.
+            </div>
+          </div>
+
+          <!-- Pergunta 5 -->
+          <div class="border border-slate-200 rounded-2xl bg-white overflow-hidden scroll-reveal">
+            <button onclick="toggleFaq(this)" class="w-full p-6 text-left flex items-center justify-between font-bold text-[#124A6E] text-base hover:bg-slate-50 transition-colors">
+              <span>E se a placa não for encontrada no sistema?</span>
+              <span class="iconify w-5 h-5 text-[#3DB5B4] transform transition-transform duration-300" data-icon="solar:alt-arrow-down-linear"></span>
+            </button>
+            <div class="px-6 pb-6 text-xs sm:text-sm text-slate-600 leading-relaxed hidden">
+              Se por algum problema a placa digitada não retornar dados no sistema, o valor pago é automaticamente estornado para a sua conta.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 9) CTA FINAL DE ALTA URGÊNCIA -->
+    <!-- ========================================== -->
+    <section class="py-16 lg:py-24 bg-[#124A6E] text-white relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-r from-[#124A6E] to-[#0e3c59]"></div>
+      <div class="beam-h" style="animation: beam-h 4s infinite; top: 20%;"></div>
+
+      <div class="max-w-[1000px] mx-auto px-6 relative z-10 text-center scroll-reveal">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-6">
+          Não compre um problema sobre rodas.
+        </h2>
+        <p class="text-base sm:text-lg text-slate-200 max-w-2xl mx-auto mb-10">
+          Consulte o histórico agora mesmo por apenas <span class="text-emerald-400 font-extrabold font-mono-code text-xl sm:text-2xl">R$ 19,90</span> e tome sua decisão com total segurança financeira.
+        </p>
+
+        <div class="max-w-md mx-auto">
+          <Button href="#hero-form" variant="accent" size="lg" fullWidth pulse icon="solar:magnifier-linear">
+            Consultar Placa Agora
+          </Button>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- MODAL / DRAWER: MEU CARRINHO -->
+  <!-- ========================================== -->
+  <div id="cart-backdrop" onclick="closeCartDrawer()" class="fixed inset-0 bg-[#124A6E]/50 backdrop-blur-sm z-[240] hidden transition-opacity"></div>
+
+  <aside id="cart-drawer" class="fixed inset-y-0 right-0 z-[250] w-full sm:w-[420px] bg-white shadow-2xl transition-transform duration-300 transform translate-x-full flex flex-col justify-between">
+    
+    <!-- Header do Carrinho -->
+    <div class="p-5 border-b border-slate-100">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <button onclick="closeCartDrawer()" class="p-1 text-slate-400 hover:text-slate-700 transition-colors">
+            <span class="iconify w-5 h-5" data-icon="solar:alt-arrow-left-linear"></span>
+          </button>
+          <h3 class="text-xl font-bold text-[#124A6E]">Meu carrinho</h3>
+        </div>
+        <button onclick="clearCart()" class="text-xs font-semibold text-rose-500 hover:text-rose-700 transition-colors">
+          Limpar
+        </button>
+      </div>
+
+      <!-- Stepper / Progresso (Carrinho -> Pagar) -->
+      <div class="flex items-center justify-center gap-4 mt-5 pt-3 border-t border-slate-100">
+        <div class="flex items-center gap-2 text-xs font-bold text-[#124A6E]">
+          <div class="w-7 h-7 rounded-full bg-[#3DB5B4]/20 text-[#3DB5B4] flex items-center justify-center">
+            <span class="iconify w-4 h-4" data-icon="solar:cart-bold"></span>
+          </div>
+          <span>Carrinho</span>
+        </div>
+        <div class="w-12 h-0.5 bg-slate-200"></div>
+        <div class="flex items-center gap-2 text-xs font-semibold text-slate-400">
+          <div class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center">
+            <span class="iconify w-4 h-4" data-icon="solar:card-linear"></span>
+          </div>
+          <span>Pagar</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista Dinâmica de Itens do Carrinho -->
+    <div class="p-5 flex-1 overflow-y-auto space-y-4" id="cart-items-container">
+      <!-- Itens renderizados via JS -->
+    </div>
+
+    <!-- Footer do Carrinho -->
+    <div class="p-5 border-t border-slate-100 bg-slate-50/70 space-y-4">
+      
+      <!-- Campo para Inserir Cupom de Desconto -->
+      <div class="space-y-1.5">
+        <div class="flex items-center gap-2">
+          <div class="relative flex-1">
+            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 iconify w-4 h-4" data-icon="solar:ticket-sale-linear"></span>
+            <input type="text" 
+                   id="coupon-input" 
+                   placeholder="Cupom de Desconto (ex: DOC15)" 
+                   class="w-full pl-10 pr-4 py-2.5 text-xs font-mono-code uppercase border border-slate-200 rounded-xl focus:outline-none focus:border-[#3DB5B4] bg-white"/>
+          </div>
+          <button onclick="applyCoupon()" 
+                  class="px-4 py-2.5 bg-[#124A6E] hover:bg-[#3DB5B4] text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center">
+            <span class="iconify w-4 h-4" data-icon="solar:magnifier-linear"></span>
+          </button>
+        </div>
+        <p id="coupon-message" class="hidden text-[11px] font-semibold font-mono-code"></p>
+      </div>
+
+      <!-- Resumo do Pedido -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-2 text-xs">
+        <h4 class="font-bold text-[#124A6E] border-b border-slate-100 pb-1.5 mb-2">Resumo do Pedido:</h4>
+        
+        <div id="summary-items-list" class="space-y-1 text-slate-600">
+          <!-- Linhas de resumo via JS -->
+        </div>
+
+        <div id="summary-discount-row" class="hidden flex justify-between text-emerald-600 font-semibold pt-1">
+          <span>Desconto Cupom:</span>
+          <span id="summary-discount-value">- R$ 0,00</span>
+        </div>
+
+        <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-sm font-bold">
+          <span class="text-[#124A6E]">Valor Total</span>
+          <span class="text-emerald-600 font-mono-code text-lg sm:text-xl font-extrabold" id="cart-total-price">R$ 0,00</span>
+        </div>
+      </div>
+
+      <!-- Botão Principal: Ir para o Pagamento -->
+      <Button onclick="proceedToCheckout()" variant="primary" size="lg" fullWidth pulse icon="solar:shield-check-bold">
+        IR PARA O PAGAMENTO
+      </Button>
+
+      <button onclick="closeCartDrawer()" class="w-full text-center text-xs font-semibold text-[#3DB5B4] hover:underline block pt-1">
+        Adicionar mais itens ao carrinho
+      </button>
+
+    </div>
+
+  </aside>
+
+  <!-- ========================================== -->
+  <!-- MODAL DE SIMULAÇÃO DE PRÉVIA GRÁTIS (TEASER) -->
+  <!-- ========================================== -->
+  <div id="teaser-modal" class="fixed inset-0 z-[200] bg-[#124A6E]/60 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative animate-reveal overflow-hidden">
+      
+      <button onclick="closeTeaserModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 transition-colors">
+        <span class="iconify w-6 h-6" data-icon="solar:close-circle-bold"></span>
+      </button>
+
+      <!-- Estado 1: Loading Animado de Busca nas Bases -->
+      <div id="modal-loading-state" class="py-8 text-center space-y-4">
+        <div class="w-16 h-16 border-4 border-[#3DB5B4]/30 border-t-[#3DB5B4] rounded-full animate-spin mx-auto"></div>
+        <h4 class="text-lg font-bold text-[#124A6E]">Consultando Base de Dados...</h4>
+        <p class="text-xs text-slate-500 font-mono-code" id="loading-status-text">Checando bases do DENATRAN, leilões e seguradoras...</p>
+      </div>
+
+      <!-- Estado 2: Resultado Teaser com Blur de Proteção -->
+      <div id="modal-result-state" class="hidden space-y-5">
+        
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-[10px] font-mono-code text-[#3DB5B4] font-bold uppercase">Veículo Localizado</span>
+            <h3 class="text-lg font-bold text-[#124A6E]" id="teaser-vehicle-title">HONDA CIVIC 2.0 FLEX 2021</h3>
+          </div>
+          <span class="text-xs font-mono-code bg-emerald-50 text-emerald-600 border border-emerald-200 px-2.5 py-1 rounded-full font-bold">PLACA OK</span>
+        </div>
+
+        <p class="text-xs text-slate-600">
+          Encontramos registros para este veículo em nossas bases. Veja a prévia abaixo:
+        </p>
+
+        <!-- Teaser com Itens Ocultos por Blur -->
+        <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+          
+          <div class="flex items-center justify-between p-2.5 bg-white rounded border border-slate-100 text-xs">
+            <span class="font-semibold text-slate-700">Histórico de Leilão:</span>
+            <span class="text-rose-600 font-bold bg-rose-50 px-2 py-0.5 rounded blur-teaser">REGISTRO ENCONTRADO</span>
+          </div>
+
+          <div class="flex items-center justify-between p-2.5 bg-white rounded border border-slate-100 text-xs">
+            <span class="font-semibold text-slate-700">Histórico de Batida / Sinistro:</span>
+            <span class="text-rose-600 font-bold bg-rose-50 px-2 py-0.5 rounded blur-teaser">SINISTRO VERIFICADO</span>
+          </div>
+
+          <div class="flex items-center justify-between p-2.5 bg-white rounded border border-slate-100 text-xs">
+            <span class="font-semibold text-slate-700">Restrição de Gravame:</span>
+            <span class="text-amber-600 font-bold bg-amber-50 px-2 py-0.5 rounded blur-teaser">ALIENAÇÃO ATIVA</span>
+          </div>
+
+          <div class="flex items-center justify-between p-2.5 bg-white rounded border border-slate-100 text-xs">
+            <span class="font-semibold text-slate-700">Valor Tabela FIPE:</span>
+            <span class="text-[#124A6E] font-bold font-mono-code">R$ 115.400,00</span>
+          </div>
+
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 p-3 rounded-lg flex items-center gap-2 text-xs text-amber-800">
+          <span class="iconify w-5 h-5 text-amber-600 flex-shrink-0" data-icon="solar:lock-keyhole-bold"></span>
+          <span>Desbloqueie o relatório completo para ver as fotos do leilão e os detalhes do sinistro!</span>
+        </div>
+
+        <!-- CTA de Desbloqueio Instantâneo -->
+        <div class="pt-2">
+          <Button onclick="addToCart('veiculo-completo'); closeTeaserModal();" variant="primary" size="md" fullWidth pulse>
+            <span>Desbloquear Relatório Completo por</span>
+            <span class="text-emerald-400 font-extrabold font-mono-code text-sm ml-1">R$ 39,90</span>
+          </Button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- SCRIPTS DE INTERATIVIDADE & INTEGRAÇÕES DO CARRINHO -->
+  <!-- ========================================== -->
+  <script is:inline>
+    // Dicionário de Planos / Consultas Disponíveis
+    const PRODUCTS_CATALOG = {
+      'veiculo-completo': { id: 'veiculo-completo', name: 'Veículo Completo', originalPrice: 69.90, price: 49.90 },
+      'veiculo-essencial': { id: 'veiculo-essencial', name: 'Veículo Essencial', originalPrice: 52.90, price: 39.90 },
+      'leilao-dados': { id: 'leilao-dados', name: 'Leilão + Dados do Veículo', originalPrice: 34.90, price: 21.90 },
+      'lojista': { id: 'lojista', name: 'Plano Lojista Pro (Mensal)', originalPrice: 149.90, price: 99.90 }
+    };
+
+    // Estado Global do Carrinho
+    let cartItems = [];
+    let appliedDiscountPercent = 0;
+    let activeCouponCode = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+
+      // Scroll Reveal Observer
+      const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+
+      renderCartUI();
+      initAuroraBackground();
+    });
+
+    // EFEITO AURORA WEBGL SHADER
+    function initAuroraBackground() {
+      const ctn = document.getElementById('aurora-container');
+      if (!ctn || typeof OGL === 'undefined') return;
+
+      const { Renderer, Program, Mesh, Color, Triangle } = OGL;
+
+      const VERT = `#version 300 es
+in vec2 position;
+void main() {
+  gl_Position = vec4(position, 0.0, 1.0);
+}
+`;
+
+      const FRAG = `#version 300 es
+precision highp float;
+
+uniform float uTime;
+uniform float uAmplitude;
+uniform vec3 uColorStops[3];
+uniform vec2 uResolution;
+uniform float uBlend;
+uniform float uLightMode;
+
+out vec4 fragColor;
+
+vec3 permute(vec3 x) {
+  return mod(((x * 34.0) + 1.0) * x, 289.0);
+}
+
+float snoise(vec2 v){
+  const vec4 C = vec4(
+      0.211324865405187, 0.366025403784439,
+      -0.577350269189626, 0.024390243902439
+  );
+  vec2 i  = floor(v + dot(v, C.yy));
+  vec2 x0 = v - i + dot(i, C.xx);
+  vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod(i, 289.0);
+
+  vec3 p = permute(
+      permute(i.y + vec3(0.0, i1.y, 1.0))
+    + i.x + vec3(0.0, i1.x, 1.0)
+  );
+
+  vec3 m = max(
+      0.5 - vec3(
+          dot(x0, x0),
+          dot(x12.xy, x12.xy),
+          dot(x12.zw, x12.zw)
+      ), 
+      0.0
+  );
+  m = m * m;
+  m = m * m;
+
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+  m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
+
+  vec3 g;
+  g.x  = a0.x  * x0.x  + h.x  * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+struct ColorStop {
+  vec3 color;
+  float position;
+};
+
+#define COLOR_RAMP(colors, factor, finalColor) {              \
+  int index = 0;                                            \
+  for (int i = 0; i < 2; i++) {                               \
+     ColorStop currentColor = colors[i];                    \
+     bool isInBetween = currentColor.position <= factor;    \
+     index = int(mix(float(index), float(i), float(isInBetween))); \
+  }                                                         \
+  ColorStop currentColor = colors[index];                   \
+  ColorStop nextColor = colors[index + 1];                  \
+  float range = nextColor.position - currentColor.position; \
+  float lerpFactor = (factor - currentColor.position) / range; \
+  finalColor = mix(currentColor.color, nextColor.color, lerpFactor); \
+}
+
+void main() {
+  vec2 uv = gl_FragCoord.xy / uResolution;
+  
+  ColorStop colors[3];
+  colors[0] = ColorStop(uColorStops[0], 0.0);
+  colors[1] = ColorStop(uColorStops[1], 0.5);
+  colors[2] = ColorStop(uColorStops[2], 1.0);
+  
+  vec3 rampColor;
+  COLOR_RAMP(colors, uv.x, rampColor);
+  
+  float height = snoise(vec2(uv.x * 2.2 + uTime * 0.12, uTime * 0.28)) * 0.65 * uAmplitude;
+  height = exp(height);
+  height = (uv.y * 2.0 - height + 0.15);
+  float intensity = 0.85 * height;
+  
+  float midPoint = 0.12;
+  float auroraAlpha = smoothstep(midPoint - uBlend * 0.4, midPoint + uBlend * 0.4, intensity);
+  
+  vec3 auroraColor = clamp(rampColor * (0.9 + 0.5 * intensity), 0.0, 1.0);
+  float alpha = clamp(auroraAlpha * 0.75, 0.0, 0.85);
+  
+  fragColor = vec4(auroraColor * alpha, alpha);
+}
+`;
+
+    try {
+      const renderer = new Renderer({
+        alpha: true,
+        premultipliedAlpha: true,
+        antialias: true
+      });
+      const gl = renderer.gl;
+      gl.clearColor(0, 0, 0, 0);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      gl.canvas.style.backgroundColor = 'transparent';
+      gl.canvas.style.width = '100%';
+      gl.canvas.style.height = '100%';
+      gl.canvas.style.display = 'block';
+
+      let program;
+
+      function resize() {
+        if (!ctn) return;
+        const width = ctn.offsetWidth || window.innerWidth;
+        const height = ctn.offsetHeight || 600;
+        renderer.setSize(width, height);
+        if (program) {
+          program.uniforms.uResolution.value = [width, height];
+        }
+      }
+      window.addEventListener('resize', resize);
+
+      const geometry = new Triangle(gl);
+      if (geometry.attributes.uv) {
+        delete geometry.attributes.uv;
+      }
+
+      const colorStops = ["#39B49D", "#c9f2ea", "#1F6790"];
+      const colorStopsArray = colorStops.map(hex => {
+        const c = new Color(hex);
+        return [c.r, c.g, c.b];
+      });
+
+      program = new Program(gl, {
+        vertex: VERT,
+        fragment: FRAG,
+        uniforms: {
+          uTime: { value: 0 },
+          uAmplitude: { value: 1.5 },
+          uColorStops: { value: colorStopsArray },
+          uResolution: { value: [ctn.offsetWidth || window.innerWidth, ctn.offsetHeight || 600] },
+          uBlend: { value: 0.5 },
+          uLightMode: { value: 0 }
+        }
+      });
+
+      const mesh = new Mesh(gl, { geometry, program });
+      ctn.appendChild(gl.canvas);
+
+      let animateId = 0;
+      const speed = 1.25;
+      const amplitude = 1.5;
+      const blend = 0.5;
+
+      const update = t => {
+        animateId = requestAnimationFrame(update);
+        const time = t * 0.01;
+        program.uniforms.uTime.value = time * speed * 0.1;
+        program.uniforms.uAmplitude.value = amplitude;
+        program.uniforms.uBlend.value = blend;
+        program.uniforms.uLightMode.value = 0;
+        renderer.render({ scene: mesh });
+      };
+      animateId = requestAnimationFrame(update);
+      resize();
+    } catch (err) {
+      console.warn('Aurora WebGL animation initialization error:', err);
+    }
+  }
+
+  // Formatação de Moeda BRL
+  function formatMoney(amount) {
+    return amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  // Adicionar Item ao Carrinho e Abrir Drawer
+  function addToCart(productId) {
+    const product = PRODUCTS_CATALOG[productId];
+    if (!product) return;
+
+    const existingIndex = cartItems.findIndex(item => item.id === productId);
+    if (existingIndex > -1) {
+      cartItems[existingIndex].quantity += 1;
+    } else {
+      cartItems.push({ ...product, quantity: 1 });
+    }
+
+    renderCartUI();
+    openCartDrawer();
+  }
+
+  // Alterar Quantidade do Item
+  function updateQuantity(productId, delta) {
+    const index = cartItems.findIndex(item => item.id === productId);
+    if (index > -1) {
+      cartItems[index].quantity += delta;
+      if (cartItems[index].quantity <= 0) {
+        cartItems.splice(index, 1);
+      }
+    }
+    renderCartUI();
+  }
+
+  // Remover Item do Carrinho
+  function removeFromCart(productId) {
+    cartItems = cartItems.filter(item => item.id !== productId);
+    renderCartUI();
+  }
+
+  // Limpar Carrinho Inteiro
+  function clearCart() {
+    cartItems = [];
+    appliedDiscountPercent = 0;
+    activeCouponCode = '';
+    const input = document.getElementById('coupon-input');
+    if (input) input.value = '';
+    const msg = document.getElementById('coupon-message');
+    if (msg) msg.classList.add('hidden');
+    renderCartUI();
+  }
+
+  // Aplicar Cupom de Desconto
+  function applyCoupon() {
+    const input = document.getElementById('coupon-input').value.trim().toUpperCase();
+    const msgEl = document.getElementById('coupon-message');
+
+    if (!input) {
+      msgEl.textContent = 'Por favor, digite um cupom.';
+      msgEl.className = 'text-[11px] font-semibold font-mono-code text-rose-500 block';
+      return;
+    }
+
+    if (['DOC15', 'PRIMEIRA', 'OLHO10', 'DOCUMENTALISTA'].includes(input)) {
+      appliedDiscountPercent = 0.15; // 15% OFF
+      activeCouponCode = input;
+      msgEl.textContent = `Cupom ${input} aplicado! 15% de desconto garantido.`;
+      msgEl.className = 'text-[11px] font-semibold font-mono-code text-emerald-600 block';
+    } else {
+      msgEl.textContent = 'Cupom inválido ou expirado.';
+      msgEl.className = 'text-[11px] font-semibold font-mono-code text-rose-500 block';
+    }
+
+    renderCartUI();
+  }
+
+  // Renderizar Interface do Carrinho
+  function renderCartUI() {
+    const container = document.getElementById('cart-items-container');
+    const badge = document.getElementById('cart-badge');
+    const summaryList = document.getElementById('summary-items-list');
+    const totalEl = document.getElementById('cart-total-price');
+    const discountRow = document.getElementById('summary-discount-row');
+    const discountValueEl = document.getElementById('summary-discount-value');
+
+    if (!container || !badge || !summaryList || !totalEl) return;
+
+    const totalCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+    badge.textContent = totalCount;
+
+    if (cartItems.length === 0) {
+      container.innerHTML = `
+        <div class="py-12 text-center text-slate-400 space-y-3">
+          <span class="iconify w-12 h-12 mx-auto text-slate-300" data-icon="solar:cart-large-minimalistic-linear"></span>
+          <p class="text-xs">Seu carrinho está vazio.</p>
+          <button onclick="closeCartDrawer()" class="text-xs font-bold text-[#3DB5B4] hover:underline">
+            Escolher uma consulta
+          </button>
+        </div>
+      `;
+      summaryList.innerHTML = `<p class="italic text-slate-400 text-[11px]">Nenhum item selecionado.</p>`;
+      totalEl.textContent = 'R$ 0,00';
+      if (discountRow) discountRow.classList.add('hidden');
+      return;
+    }
+
+    let itemsHTML = '';
+    let summaryHTML = '';
+    let subtotal = 0;
+
+    cartItems.forEach(item => {
+      const itemSubtotal = item.price * item.quantity;
+      subtotal += itemSubtotal;
+
+      itemsHTML += `
+        <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-between gap-3 shadow-2xs">
+          <div class="flex-1">
+            <h5 class="text-xs font-bold text-[#124A6E]">${item.name}</h5>
+            ${item.originalPrice > 0 ? `
+              <p class="text-[10px] text-rose-500 font-semibold line-through">de ${formatMoney(item.originalPrice)} por</p>
+              <p class="text-sm font-extrabold text-emerald-600 font-mono-code">${formatMoney(item.price)}</p>
+            ` : `
+              <p class="text-xs font-extrabold text-emerald-600 font-mono-code">GRÁTIS</p>
+            `}
+          </div>
+
+          <div class="flex items-center gap-2 bg-slate-50 p-1.5 rounded-lg border border-slate-200">
+            <button onclick="removeFromCart('${item.id}')" class="text-slate-400 hover:text-rose-500 p-1 transition-colors" title="Remover">
+              <span class="iconify w-3.5 h-3.5" data-icon="solar:trash-bin-trash-linear"></span>
+            </button>
+            <div class="flex items-center gap-1.5 px-1 font-mono-code font-bold text-xs text-[#124A6E]">
+              <button onclick="updateQuantity('${item.id}', -1)" class="w-5 h-5 rounded hover:bg-slate-200 flex items-center justify-center text-slate-600">-</button>
+              <span>${item.quantity}</span>
+              <button onclick="updateQuantity('${item.id}', 1)" class="w-5 h-5 rounded hover:bg-slate-200 flex items-center justify-center text-slate-600">+</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      summaryHTML += `
+        <div class="flex justify-between items-center text-[11px]">
+          <span>${item.name} (x${item.quantity})</span>
+          <span class="font-mono-code font-semibold">${formatMoney(itemSubtotal)}</span>
+        </div>
+      `;
+    });
+
+    container.innerHTML = itemsHTML;
+    summaryList.innerHTML = summaryHTML;
+
+    const discountAmount = subtotal * appliedDiscountPercent;
+    const finalTotal = subtotal - discountAmount;
+
+    if (discountRow) {
+      if (discountAmount > 0) {
+        discountRow.classList.remove('hidden');
+        if (discountValueEl) discountValueEl.textContent = `- ${formatMoney(discountAmount)}`;
+      } else {
+        discountRow.classList.add('hidden');
+      }
+    }
+
+    totalEl.textContent = formatMoney(finalTotal);
+  }
+
+  // Abertura e Fechamento do Drawer
+  function openCartDrawer() {
+    const backdrop = document.getElementById('cart-backdrop');
+    const drawer = document.getElementById('cart-drawer');
+    if (backdrop) backdrop.classList.remove('hidden');
+    if (drawer) drawer.classList.remove('translate-x-full');
+  }
+
+  function closeCartDrawer() {
+    const backdrop = document.getElementById('cart-backdrop');
+    const drawer = document.getElementById('cart-drawer');
+    if (backdrop) backdrop.classList.add('hidden');
+    if (drawer) drawer.classList.add('translate-x-full');
+  }
+
+  // Redirecionamento de Checkout
+  function proceedToCheckout() {
+    if (cartItems.length === 0) {
+      alert('Seu carrinho está vazio. Adicione uma consulta primeiro!');
+      return;
+    }
+    closeCartDrawer();
+    openCheckoutModal();
+  }
+
+  function selectPlan(planId) {
+    addToCart(planId);
+  }
+
+  // Formatação em Tempo Real do Input de Placa
+  function formatPlateInput(input) {
+    let value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (value.length > 3 && /^[A-Z]{3}[0-9]/.test(value)) {
+      value = value.substring(0, 3) + '-' + value.substring(3, 7);
+    } else {
+      value = value.substring(0, 7);
+    }
+    input.value = value;
+    const err = document.getElementById('plate-error');
+    if (err) err.classList.add('hidden');
+  }
+
+  // Handler de Busca da Placa
+  function handlePlateSearch(event) {
+    event.preventDefault();
+    const inputEl = document.getElementById('plate-input');
+    const plateInput = inputEl ? inputEl.value.replace(/[^A-Z0-9]/g, '') : '';
+    const errorEl = document.getElementById('plate-error');
+
+    if (plateInput.length !== 7) {
+      if (errorEl) errorEl.classList.remove('hidden');
+      return;
+    }
+
+    openTeaserModal(plateInput);
+  }
+
+  // Modal Teaser Controls
+  function openTeaserModal(plate) {
+    const modal = document.getElementById('teaser-modal');
+    const loadingState = document.getElementById('modal-loading-state');
+    const resultState = document.getElementById('modal-result-state');
+    const loadingText = document.getElementById('loading-status-text');
+
+    if (!modal || !loadingState || !resultState) return;
+
+    modal.classList.remove('hidden');
+    loadingState.classList.remove('hidden');
+    resultState.classList.add('hidden');
+
+    setTimeout(() => { if (loadingText) loadingText.textContent = "Verificando histórico de sinistro e leilões..."; }, 900);
+    setTimeout(() => { if (loadingText) loadingText.textContent = "Gerando prévia do laudo..."; }, 1800);
+    setTimeout(() => {
+      loadingState.classList.add('hidden');
+      resultState.classList.remove('hidden');
+    }, 2500);
+  }
+
+  function closeTeaserModal() {
+    const modal = document.getElementById('teaser-modal');
+    if (modal) modal.classList.add('hidden');
+  }
+
+  // Accordion FAQ Toggle
+  function toggleFaq(button) {
+    const content = button.nextElementSibling;
+    const icon = button.querySelector('.iconify');
+    if (!content) return;
+    const isHidden = content.classList.contains('hidden');
+
+    document.querySelectorAll('#faq .px-6.pb-6').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('#faq .iconify').forEach(el => el.classList.remove('rotate-180'));
+
+    if (isHidden) {
+      content.classList.remove('hidden');
+      if (icon) icon.classList.add('rotate-180');
+    }
+  }
+
+  // Expor funções no objeto global window
+  window.addToCart = addToCart;
+  window.updateQuantity = updateQuantity;
+  window.removeFromCart = removeFromCart;
+  window.clearCart = clearCart;
+  window.applyCoupon = applyCoupon;
+  window.openCartDrawer = openCartDrawer;
+  window.closeCartDrawer = closeCartDrawer;
+  window.proceedToCheckout = proceedToCheckout;
+  window.selectPlan = selectPlan;
+  window.formatPlateInput = formatPlateInput;
+  window.handlePlateSearch = handlePlateSearch;
+  window.openTeaserModal = openTeaserModal;
+  window.closeTeaserModal = closeTeaserModal;
+  window.toggleFaq = toggleFaq;
+</script>
 </Layout>

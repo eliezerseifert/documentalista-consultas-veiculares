@@ -1,0 +1,32 @@
+---
+// WhatsAppButton.astro — Componente de Botão Flutuante do WhatsApp
+interface Props {
+  phone?: string;
+  message?: string;
+  tooltipText?: string;
+}
+
+const {
+  phone = '5547991278324',
+  message = 'Olá! Gostaria de tirar dúvidas sobre a consulta veicular.',
+  tooltipText = 'Suporte pelo WhatsApp'
+} = Astro.props;
+
+const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+---
+
+<!-- Floating Action Button (Atendimento/WhatsApp Widget) -->
+<div class="fixed bottom-6 left-6 z-[90]">
+  <a 
+    href={whatsappUrl} 
+    target="_blank" 
+    rel="noopener noreferrer"
+    aria-label={tooltipText}
+    class="w-14 h-14 bg-[#3DB5B4] text-white rounded-full flex items-center justify-center shadow-lg shadow-[#3DB5B4]/30 hover:scale-110 hover:bg-[#2ca1a0] transition-all duration-300 group"
+  >
+    <span class="iconify w-7 h-7" data-icon="solar:chat-round-dots-bold"></span>
+    <span class="absolute left-16 bg-[#124A6E] text-white text-xs font-medium px-3.5 py-2 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-md pointer-events-none">
+      {tooltipText}
+    </span>
+  </a>
+</div>
