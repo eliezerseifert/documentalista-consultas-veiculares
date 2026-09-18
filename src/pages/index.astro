@@ -39,7 +39,7 @@ const plans = [
     <!-- ========================================== -->
     <!-- 2) HERO SECTION (PRIMEIRA DOBRA) -->
     <!-- ========================================== -->
-    <section id="hero-form" class="relative z-10 w-full pt-10 pb-16 lg:py-24 overflow-hidden bg-[#0F2D3E]">
+    <section id="hero-form" class="relative z-10 w-full pt-5 sm:pt-10 pb-6 lg:py-24 overflow-hidden bg-[#0F2D3E]">
       <!-- 1. VÍDEO BACKGROUND EM LOOP -->
       <video 
         id="hero-video"
@@ -61,38 +61,51 @@ const plans = [
 
       <!-- 3. FADE PROGRESSIVO DA HERO PARA BRANCO NO RODAPÉ DA DOBRA (#FFFFFF) -->
       <div 
-        class="absolute inset-x-0 bottom-0 h-44 sm:h-60 z-[2] pointer-events-none"
+        class="absolute inset-x-0 bottom-0 h-28 sm:h-60 z-[2] pointer-events-none"
         style="background: linear-gradient(to bottom, transparent 25%, rgba(255, 255, 255, 0.5) 70%, rgba(255, 255, 255, 0.9) 88%, #FFFFFF 100%);"
       ></div>
 
       <div class="max-w-[1400px] mx-auto px-6 lg:px-[6%] relative z-10">
         
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 items-center">
           
           <!-- Coluna Esquerda: Copywriting de Conversão (CRO) -->
           <div class="lg:col-span-7 flex flex-col justify-center">
             
-            <!-- Badge de Prova e Status Live -->
-            <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/15 border border-white/25 text-white text-[11px] font-bold uppercase tracking-widest mb-6 w-max animate-reveal delay-100 shadow-sm backdrop-blur-sm">
+            <!-- Badge de Prova e Status Live (Apenas Desktop) -->
+            <div class="hidden lg:inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/15 border border-white/25 text-white text-[11px] font-bold uppercase tracking-widest mb-6 w-max animate-reveal delay-100 shadow-sm backdrop-blur-sm">
               <span class="relative flex h-2.5 w-2.5">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
               </span>
-              +500 Mil Consultas Realizadas • Base Denatran & Leilões
+              Mais de 10 anos de experiência com Despachantes de Veículos
             </div>
 
-            <!-- Headline Principal Orientada a Risco/Prejuízo -->
-            <h1 class="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.25rem] font-extrabold leading-[1.1] tracking-tight text-white animate-reveal delay-100 drop-shadow-sm">
-              Evite Golpes e Prejuízos de até <span class="text-emerald-300 font-extrabold">R$ 50 mil</span> ao Comprar um Carro Usado
+            <!-- Badge +10 Anos de Experiência (Apenas Mobile - Estilo Pill Capsule conforme print) -->
+            <div class="flex justify-center mb-2.5 lg:hidden animate-reveal delay-100">
+              <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 border border-white/25 text-white text-[11px] font-bold uppercase tracking-widest shadow-sm backdrop-blur-sm">
+                <span class="relative flex h-2.5 w-2.5">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+                </span>
+                +10 Anos de Experiência
+              </div>
+            </div>
+
+            <!-- Headline Principal Orientada a Risco/Prejuízo (Centralizada e com Quebras Organizadas no Mobile) -->
+            <h1 class="text-2xl sm:text-4xl lg:text-5xl xl:text-[3.25rem] font-extrabold leading-[1.2] sm:leading-[1.15] lg:leading-[1.1] tracking-tight text-white text-center lg:text-left mb-3 lg:mb-0 animate-reveal delay-100 drop-shadow-sm">
+              Evite Golpes e Prejuízos <br class="sm:hidden" />
+              de até <span class="text-emerald-300 font-extrabold">R$ 50 mil</span> ao <br class="sm:hidden" />
+              Comprar um Carro Usado
             </h1>
 
-            <!-- Subheadline Descritiva -->
-            <p class="text-base lg:text-lg text-slate-100 font-normal leading-relaxed mt-5 max-w-2xl animate-reveal delay-200 text-shadow-sm">
+            <!-- Subheadline Descritiva (Apenas Desktop) -->
+            <p class="hidden lg:block text-base lg:text-lg text-slate-100 font-normal leading-relaxed mt-5 max-w-2xl animate-reveal delay-200 text-shadow-sm">
               Saiba a verdade sobre o veículo antes de pagar o sinal. Verifique histórico de <strong class="text-white font-semibold">sinistro (batidas)</strong>, <strong class="text-white font-semibold">leilão com fotos</strong>, roubo/furto, restrições, gravame e débitos apenas digitando a placa.
             </p>
 
-            <!-- Badges de Benefícios Rápidos -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-8 animate-reveal delay-300">
+            <!-- Badges de Benefícios Rápidos (Apenas Desktop) -->
+            <div class="hidden lg:grid grid-cols-2 sm:grid-cols-3 gap-3 mt-8 animate-reveal delay-300">
               <div class="flex items-center gap-2 bg-white/15 backdrop-blur-md p-2.5 rounded-lg border border-white/20 text-white">
                 <span class="iconify w-5 h-5 text-emerald-300 flex-shrink-0" data-icon="solar:shield-check-bold"></span>
                 <span class="text-xs font-semibold">Relatório 100% Seguro</span>
@@ -107,8 +120,8 @@ const plans = [
               </div>
             </div>
 
-            <!-- Micro Prova Social na Hero & Selo '+10 anos de experiência' ao lado das avaliações -->
-            <div class="flex flex-wrap items-center gap-4 sm:gap-5 mt-8 pt-6 border-t border-white/20 animate-reveal delay-400">
+            <!-- Micro Prova Social na Hero & Selo '+10 anos de experiência' (Apenas Desktop) -->
+            <div class="hidden lg:flex flex-wrap items-center gap-4 sm:gap-5 mt-8 pt-6 border-t border-white/20 animate-reveal delay-400">
               <div class="flex items-center gap-3">
                 <div class="flex -space-x-2 overflow-hidden">
                   <span class="inline-block h-8 w-8 rounded-full ring-2 ring-white/50 bg-[#124A6E] text-white text-xs font-bold text-center leading-8">RM</span>

@@ -8,7 +8,20 @@ const logoHref = isPainel ? '/painel' : '/';
 ---
 
 <header class="sticky top-0 z-[100] w-full h-[76px] lg:h-[88px] flex items-center justify-between px-4 sm:px-6 lg:px-[6%] border-b border-slate-100 bg-white/90 backdrop-blur-md transition-all">
-  <div class="flex items-center gap-2 sm:gap-3">
+  <div class="flex items-center gap-2.5 sm:gap-3">
+    <!-- Botão Hambúrguer Mobile (Lado Esquerdo da Logo) -->
+    <button 
+      type="button" 
+      id="mobile-menu-toggle"
+      onclick="toggleMobileMenu()"
+      class="flex lg:hidden items-center justify-center p-1 text-[#124A6E] hover:text-[#3DB5B4] transition-colors focus:outline-none flex-shrink-0"
+      aria-label="Abrir Menu de Navegação"
+    >
+      <svg class="w-7 h-7 text-[#124A6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
     <!-- Logo SVG Oficial -->
     <a href={logoHref} class="flex items-center gap-2">
       <img src="/images/logo.svg" alt="DOCUMENTALISTA CONSULTAS" class="h-9 sm:h-10 lg:h-12 w-auto" />
@@ -49,17 +62,6 @@ const logoHref = isPainel ? '/painel' : '/';
     <Button href="#hero-form" variant="primary" size="sm" icon="solar:magnifier-linear" class="hidden sm:flex">
       Consultar Placa
     </Button>
-
-    <!-- Botão Hambúrguer Mobile -->
-    <button 
-      type="button" 
-      id="mobile-menu-toggle"
-      onclick="toggleMobileMenu()"
-      class="flex lg:hidden items-center justify-center w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#124A6E] transition-all border border-slate-200 flex-shrink-0"
-      aria-label="Abrir Menu de Navegação"
-    >
-      <span class="iconify w-6 h-6 text-[#124A6E]" data-icon="solar:hamburger-menu-bold"></span>
-    </button>
   </div>
 </header>
 
@@ -164,6 +166,9 @@ const logoHref = isPainel ? '/painel' : '/';
     const isHidden = drawer.classList.contains('hidden');
     const shouldOpen = forceState !== undefined ? forceState : isHidden;
 
+    const hamburgerIcon = '<svg class="w-7 h-7 text-[#124A6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
+    const closeIcon = '<svg class="w-7 h-7 text-[#124A6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>';
+
     if (shouldOpen) {
       backdrop.classList.remove('hidden');
       drawer.classList.remove('hidden');
@@ -172,7 +177,7 @@ const logoHref = isPainel ? '/painel' : '/';
         drawer.classList.add('translate-y-0', 'opacity-100');
       }, 10);
       if (toggleBtn) {
-        toggleBtn.innerHTML = '<span class="iconify w-6 h-6 text-[#124A6E]" data-icon="solar:close-circle-bold"></span>';
+        toggleBtn.innerHTML = closeIcon;
       }
     } else {
       drawer.classList.remove('translate-y-0', 'opacity-100');
@@ -182,7 +187,7 @@ const logoHref = isPainel ? '/painel' : '/';
         drawer.classList.add('hidden');
       }, 300);
       if (toggleBtn) {
-        toggleBtn.innerHTML = '<span class="iconify w-6 h-6 text-[#124A6E]" data-icon="solar:hamburger-menu-bold"></span>';
+        toggleBtn.innerHTML = hamburgerIcon;
       }
     }
   }
