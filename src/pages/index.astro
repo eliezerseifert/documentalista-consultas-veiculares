@@ -47,10 +47,12 @@ const plans = [
         loop 
         muted 
         playsinline 
-        preload="metadata"
+        webkit-playsinline
+        preload="auto"
+        src="/images/hero-background-video.mp4"
         class="absolute inset-0 w-full h-full object-cover opacity-50 z-0 pointer-events-none"
       >
-        <source src="/images/Men_discussing_vehicle_history_t…_20260915190222.mp4" type="video/mp4" />
+        <source src="/images/hero-background-video.mp4" type="video/mp4" />
       </video>
 
       <!-- 2. OVERLAY COM DEGRADÊ PROFISSIONAL DA IDENTIDADE VISUAL (#3FB39D -> #1F6790) -->
@@ -775,7 +777,57 @@ const plans = [
 
       renderCartUI();
       initAuroraBackground();
+      initHeroVideoLoop();
     });
+
+    // CONTROLE FLUIDO E CONTÍNUO DO VÍDEO HERO EM LOOP
+    function initHeroVideoLoop() {
+      const video = document.getElementById('hero-video');
+      if (!video) return;
+
+      video.muted = true;
+      video.defaultMuted = true;
+
+      const playVideo = () => {
+        const promise = video.play();
+        if (promise !== undefined) {
+          promise.catch(() => {
+            video.muted = true;
+            const resumeOnInteraction = () => {
+              video.play();
+              window.removeEventListener('click', resumeOnInteraction);
+              window.removeEventListener('touchstart', resumeOnInteraction);
+              window.removeEventListener('scroll', resumeOnInteraction);
+            };
+            window.addEventListener('click', resumeOnInteraction, { once: true });
+            window.addEventListener('touchstart', resumeOnInteraction, { once: true });
+            window.addEventListener('scroll', resumeOnInteraction, { once: true });
+          });
+        }
+      };
+
+      playVideo();
+
+      // Failsafe 1: Reinício instantâneo ao fim do vídeo para loop sem delay
+      video.addEventListener('ended', () => {
+        video.currentTime = 0;
+        playVideo();
+      });
+
+      // Failsafe 2: Se pausar inesperadamente por economia de energia, retoma
+      video.addEventListener('pause', () => {
+        if (!document.hidden && video.paused) {
+          playVideo();
+        }
+      });
+
+      // Failsafe 3: Retoma quando o usuário volta para a aba
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+          playVideo();
+        }
+      });
+    }
 
     // EFEITO AURORA WEBGL SHADER
     function initAuroraBackground() {
