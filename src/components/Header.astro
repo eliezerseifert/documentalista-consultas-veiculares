@@ -47,6 +47,7 @@ const logoHref = isPainel ? '/painel' : '/';
       onclick="handleHeaderLoginClick()" 
       class="flex items-center gap-1.5 text-xs font-bold text-[#124A6E] bg-white hover:bg-slate-50 p-2 sm:py-2.5 sm:px-3.5 rounded-xl border border-slate-200 transition-all hover:border-[#3DB5B4]"
       title="Entrar na Minha Conta"
+      aria-label="Entrar na Minha Conta"
     >
       <span class="iconify w-4 h-4 text-[#3DB5B4]" data-icon="solar:user-bold"></span>
       <span id="header-user-label" class="hidden sm:inline">Entrar</span>
@@ -55,7 +56,8 @@ const logoHref = isPainel ? '/painel' : '/';
     <!-- Botão de Carrinho com Contador Badge -->
     <button onclick="openCartDrawer()" 
             class="relative flex items-center gap-2 text-xs font-semibold text-[#124A6E] bg-slate-100 hover:bg-[#3DB5B4]/15 p-2 sm:py-2.5 sm:px-4 rounded-xl border border-slate-200 transition-all"
-            title="Ver Carrinho">
+            title="Ver Carrinho"
+            aria-label="Abrir Carrinho de Compras">
       <span class="iconify w-4 h-4 text-[#3DB5B4]" data-icon="solar:cart-large-bold"></span>
       <span class="hidden sm:inline">Carrinho</span>
       <span id="cart-badge" class="bg-[#3DB5B4] text-white text-[10px] font-mono-code font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>

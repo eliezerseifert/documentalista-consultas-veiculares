@@ -161,7 +161,7 @@ const plans = [
             <div class="bg-white/95 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-2xl shadow-slate-300/40 relative z-10">
               
               <div class="flex items-center justify-between mb-4">
-                <span class="text-xs font-mono-code text-[#3DB5B4] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                <span class="text-xs font-mono-code text-[#088395] font-bold uppercase tracking-wider flex items-center gap-1.5">
                   <span class="w-2 h-2 rounded-full bg-[#3DB5B4] animate-ping"></span>
                   Consulta de Placa Online
                 </span>
@@ -170,7 +170,7 @@ const plans = [
                 </span>
               </div>
 
-              <h3 class="text-xl font-bold text-[#124A6E] mb-2">Digite a placa para consultar</h3>
+              <h2 class="text-xl font-bold text-[#124A6E] mb-2">Digite a placa para consultar</h2>
               <p class="text-xs text-slate-500 mb-6">Aceita padrão Mercosul (ex: ABC1D23) e Antigo (ex: ABC-1234).</p>
 
               <!-- Box da Placa com Visual do Padrão Mercosul -->
@@ -211,14 +211,14 @@ const plans = [
               </form>
 
               <!-- Selos de Confiança e Segurança abaixo do CTA -->
-              <div class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-around text-slate-400 text-[11px] font-mono-code">
+              <div class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-around text-slate-600 text-[11px] font-mono-code">
                 <span class="flex items-center gap-1"><span class="iconify text-[#3DB5B4]" data-icon="solar:lock-keyhole-minimalistic-bold"></span> SSL 256-bit</span>
                 <span class="flex items-center gap-1"><span class="iconify text-[#3DB5B4]" data-icon="solar:shield-check-bold"></span> LGPD OK</span>
                 <span class="flex items-center gap-1"><span class="iconify text-[#3DB5B4]" data-icon="solar:card-bold"></span> Pix / Cartão</span>
               </div>
 
               <!-- Disclaimer de órgãos públicos -->
-              <p class="text-[10px] text-slate-400 text-center mt-3">
+              <p class="text-[10px] text-slate-500 text-center mt-3">
                 * O Documentalista é um serviço privado. Não possui vínculo direto com o Detran/Denatran.
               </p>
 
@@ -312,7 +312,7 @@ const plans = [
               </div>
               <div>
                 <p class="text-xs font-bold text-[#124A6E]">Ricardo M.</p>
-                <p class="text-[10px] text-slate-400">São Paulo / SP • Economizou R$ 32.000</p>
+                <p class="text-[10px] text-slate-600 font-medium">São Paulo / SP • Economizou R$ 32.000</p>
               </div>
             </div>
           </div>
@@ -337,7 +337,7 @@ const plans = [
               </div>
               <div>
                 <p class="text-xs font-bold text-[#124A6E]">Juliana K.</p>
-                <p class="text-[10px] text-slate-400">Curitiba / PR • Evitou golpe de leilão</p>
+                <p class="text-[10px] text-slate-600 font-medium">Curitiba / PR • Evitou golpe de leilão</p>
               </div>
             </div>
           </div>
@@ -362,7 +362,7 @@ const plans = [
               </div>
               <div>
                 <p class="text-xs font-bold text-[#124A6E]">Carlos E.</p>
-                <p class="text-[10px] text-slate-400">Belo Horizonte / MG • Lojista parceiro</p>
+                <p class="text-[10px] text-slate-600 font-medium">Belo Horizonte / MG • Lojista parceiro</p>
               </div>
             </div>
           </div>
@@ -441,8 +441,8 @@ const plans = [
               <span class="iconify w-12 h-12" data-icon="solar:verified-check-bold"></span>
             </div>
             <div>
-              <span class="text-xs font-mono-code text-[#3DB5B4] font-bold uppercase tracking-wider">Compromisso de Qualidade</span>
-              <h3 class="text-2xl font-bold text-[#124A6E] mt-1 mb-2">Garantia de Devolução 100%</h3>
+              <span class="text-xs font-mono-code text-[#088395] font-bold uppercase tracking-wider">Compromisso de Qualidade</span>
+              <h2 class="text-2xl font-bold text-[#124A6E] mt-1 mb-2">Garantia de Devolução 100%</h2>
               <p class="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-xl">
                 Se por qualquer motivo técnico o relatório não for gerado ou houver inconsistência comprovada nas informações do veículo, nós devolvemos o valor da sua consulta sem complicações.
               </p>
@@ -576,7 +576,7 @@ const plans = [
     <div class="p-5 border-b border-slate-100">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <button onclick="closeCartDrawer()" class="p-1 text-slate-400 hover:text-slate-700 transition-colors">
+          <button onclick="closeCartDrawer()" aria-label="Fechar carrinho" class="p-1 text-slate-500 hover:text-slate-700 transition-colors">
             <span class="iconify w-5 h-5" data-icon="solar:alt-arrow-left-linear"></span>
           </button>
           <h3 class="text-xl font-bold text-[#124A6E]">Meu carrinho</h3>
@@ -595,8 +595,8 @@ const plans = [
           <span>Carrinho</span>
         </div>
         <div class="w-12 h-0.5 bg-slate-200"></div>
-        <div class="flex items-center gap-2 text-xs font-semibold text-slate-400">
-          <div class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center">
+        <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
+          <div class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center">
             <span class="iconify w-4 h-4" data-icon="solar:card-linear"></span>
           </div>
           <span>Pagar</span>
@@ -623,6 +623,7 @@ const plans = [
                    class="w-full pl-10 pr-4 py-2.5 text-xs font-mono-code uppercase border border-slate-200 rounded-xl focus:outline-none focus:border-[#3DB5B4] bg-white"/>
           </div>
           <button onclick="applyCoupon()" 
+                  aria-label="Aplicar cupom de desconto"
                   class="px-4 py-2.5 bg-[#124A6E] hover:bg-[#3DB5B4] text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center">
             <span class="iconify w-4 h-4" data-icon="solar:magnifier-linear"></span>
           </button>
@@ -632,7 +633,7 @@ const plans = [
 
       <!-- Resumo do Pedido -->
       <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-2 text-xs">
-        <h4 class="font-bold text-[#124A6E] border-b border-slate-100 pb-1.5 mb-2">Resumo do Pedido:</h4>
+        <p class="font-bold text-[#124A6E] border-b border-slate-100 pb-1.5 mb-2">Resumo do Pedido:</p>
         
         <div id="summary-items-list" class="space-y-1 text-slate-600">
           <!-- Linhas de resumo via JS -->
@@ -654,7 +655,7 @@ const plans = [
         IR PARA O PAGAMENTO
       </Button>
 
-      <button onclick="closeCartDrawer()" class="w-full text-center text-xs font-semibold text-[#3DB5B4] hover:underline block pt-1">
+      <button onclick="closeCartDrawer()" class="w-full text-center text-xs font-semibold text-[#088395] hover:underline block pt-1">
         Adicionar mais itens ao carrinho
       </button>
 
@@ -668,14 +669,14 @@ const plans = [
   <div id="teaser-modal" class="fixed inset-0 z-[200] bg-[#124A6E]/60 backdrop-blur-md hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative animate-reveal overflow-hidden">
       
-      <button onclick="closeTeaserModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 transition-colors">
+      <button onclick="closeTeaserModal()" aria-label="Fechar prévia do veículo" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 transition-colors">
         <span class="iconify w-6 h-6" data-icon="solar:close-circle-bold"></span>
       </button>
 
       <!-- Estado 1: Loading Animado de Busca nas Bases -->
       <div id="modal-loading-state" class="py-8 text-center space-y-4">
         <div class="w-16 h-16 border-4 border-[#3DB5B4]/30 border-t-[#3DB5B4] rounded-full animate-spin mx-auto"></div>
-        <h4 class="text-lg font-bold text-[#124A6E]">Consultando Base de Dados...</h4>
+        <p class="text-lg font-bold text-[#124A6E]">Consultando Base de Dados...</p>
         <p class="text-xs text-slate-500 font-mono-code" id="loading-status-text">Checando bases do DENATRAN, leilões e seguradoras...</p>
       </div>
 
@@ -684,8 +685,8 @@ const plans = [
         
         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
           <div>
-            <span class="text-[10px] font-mono-code text-[#3DB5B4] font-bold uppercase">Veículo Localizado</span>
-            <h3 class="text-lg font-bold text-[#124A6E]" id="teaser-vehicle-title">HONDA CIVIC 2.0 FLEX 2021</h3>
+            <span class="text-[10px] font-mono-code text-[#088395] font-bold uppercase">Veículo Localizado</span>
+            <p class="text-lg font-bold text-[#124A6E]" id="teaser-vehicle-title">HONDA CIVIC 2.0 FLEX 2021</p>
           </div>
           <span class="text-xs font-mono-code bg-emerald-50 text-emerald-600 border border-emerald-200 px-2.5 py-1 rounded-full font-bold">PLACA OK</span>
         </div>
@@ -1058,15 +1059,15 @@ void main() {
 
     if (cartItems.length === 0) {
       container.innerHTML = `
-        <div class="py-12 text-center text-slate-400 space-y-3">
+        <div class="py-12 text-center text-slate-500 space-y-3">
           <span class="iconify w-12 h-12 mx-auto text-slate-300" data-icon="solar:cart-large-minimalistic-linear"></span>
           <p class="text-xs">Seu carrinho está vazio.</p>
-          <button onclick="closeCartDrawer()" class="text-xs font-bold text-[#3DB5B4] hover:underline">
+          <button onclick="closeCartDrawer()" class="text-xs font-bold text-[#088395] hover:underline">
             Escolher uma consulta
           </button>
         </div>
       `;
-      summaryList.innerHTML = `<p class="italic text-slate-400 text-[11px]">Nenhum item selecionado.</p>`;
+      summaryList.innerHTML = `<p class="italic text-slate-500 text-[11px]">Nenhum item selecionado.</p>`;
       totalEl.textContent = 'R$ 0,00';
       if (discountRow) discountRow.classList.add('hidden');
       return;
@@ -1083,7 +1084,7 @@ void main() {
       itemsHTML += `
         <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-between gap-3 shadow-2xs">
           <div class="flex-1">
-            <h5 class="text-xs font-bold text-[#124A6E]">${item.name}</h5>
+            <p class="text-xs font-bold text-[#124A6E]">${item.name}</p>
             ${item.originalPrice > 0 ? `
               <p class="text-[10px] text-rose-500 font-semibold line-through">de ${formatMoney(item.originalPrice)} por</p>
               <p class="text-sm font-extrabold text-emerald-600 font-mono-code">${formatMoney(item.price)}</p>
@@ -1093,13 +1094,13 @@ void main() {
           </div>
 
           <div class="flex items-center gap-2 bg-slate-50 p-1.5 rounded-lg border border-slate-200">
-            <button onclick="removeFromCart('${item.id}')" class="text-slate-400 hover:text-rose-500 p-1 transition-colors" title="Remover">
+            <button onclick="removeFromCart('${item.id}')" aria-label="Remover ${item.name} do carrinho" class="text-slate-400 hover:text-rose-500 p-1 transition-colors" title="Remover">
               <span class="iconify w-3.5 h-3.5" data-icon="solar:trash-bin-trash-linear"></span>
             </button>
             <div class="flex items-center gap-1.5 px-1 font-mono-code font-bold text-xs text-[#124A6E]">
-              <button onclick="updateQuantity('${item.id}', -1)" class="w-5 h-5 rounded hover:bg-slate-200 flex items-center justify-center text-slate-600">-</button>
+              <button onclick="updateQuantity('${item.id}', -1)" aria-label="Diminuir quantidade" class="w-5 h-5 rounded hover:bg-slate-200 flex items-center justify-center text-slate-600">-</button>
               <span>${item.quantity}</span>
-              <button onclick="updateQuantity('${item.id}', 1)" class="w-5 h-5 rounded hover:bg-slate-200 flex items-center justify-center text-slate-600">+</button>
+              <button onclick="updateQuantity('${item.id}', 1)" aria-label="Aumentar quantidade" class="w-5 h-5 rounded hover:bg-slate-200 flex items-center justify-center text-slate-600">+</button>
             </div>
           </div>
         </div>

@@ -74,6 +74,7 @@ const {
       onclick="selectGalleryMedia('image', 0)"
       class="gallery-thumb active aspect-square rounded-xl border-2 border-[#3DB5B4] bg-white p-1 overflow-hidden relative hover:opacity-90 transition-all focus:outline-none ring-2 ring-[#3DB5B4]/30"
       id="thumb-0"
+      aria-label="Visualizar miniatura do Laudo"
     >
       <Image src={mainImage as any} alt="Preview do Laudo" class="w-full h-full object-cover rounded-lg" />
       <span class="absolute bottom-1 right-1 bg-black/60 text-white text-[9px] font-mono-code px-1.5 py-0.5 rounded backdrop-blur-sm">
@@ -87,6 +88,7 @@ const {
       onclick="selectGalleryMedia('video', 1)"
       class="gallery-thumb aspect-square rounded-xl border-2 border-slate-200 bg-slate-900 p-1 overflow-hidden relative hover:border-[#3DB5B4] transition-all focus:outline-none"
       id="thumb-1"
+      aria-label="Visualizar Vídeo Explicativo 1"
     >
       <video class="w-full h-full object-cover rounded-lg opacity-80 pointer-events-none" muted preload="metadata">
         <source src={video1} type="video/mp4" />
@@ -105,6 +107,7 @@ const {
       onclick="selectGalleryMedia('video', 2)"
       class="gallery-thumb aspect-square rounded-xl border-2 border-slate-200 bg-slate-900 p-1 overflow-hidden relative hover:border-[#3DB5B4] transition-all focus:outline-none"
       id="thumb-2"
+      aria-label="Visualizar Vídeo Explicativo 2"
     >
       <video class="w-full h-full object-cover rounded-lg opacity-80 pointer-events-none" muted preload="metadata">
         <source src={video2} type="video/mp4" />
