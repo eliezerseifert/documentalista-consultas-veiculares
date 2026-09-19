@@ -1,5 +1,6 @@
 ---
 // CheckoutModal.astro — Modal Inteligente de Checkout & Pagamento com Simulação de Cartão e PIX
+import { Image } from 'astro:assets';
 ---
 
 <div 
@@ -405,9 +406,11 @@
             
             <!-- QR Code Graphic Mockup -->
             <div class="w-44 h-44 bg-white p-3 rounded-2xl border-2 border-emerald-500 mx-auto shadow-md flex items-center justify-center relative">
-              <img 
+              <Image 
                 src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=00020126580014BR.GOV.BCB.PIX0136documentalista.consultas@pagamento.com.br520400005303986540539.905802BR5923DOCUMENTALISTA6009SAO%20PAULO620705031236304E85C" 
                 alt="QR Code Pix"
+                width={180}
+                height={180}
                 class="w-full h-full object-contain rounded-lg"
               />
             </div>

@@ -1,6 +1,8 @@
 ---
 // FeaturedPlanSection.astro — Componente da Seção "Descubra tudo o que nossa consulta completa oferece!"
 import Button from './Button.astro';
+import { Image } from 'astro:assets';
+import raioxImg from '../assets/images/raiox-carro-documentalista-consultas-veiculares.png';
 
 const features = [
   'Aceitação em seguro',
@@ -82,20 +84,24 @@ const features = [
 
             <!-- Imagem do Veículo ao lado do Título no Mobile (+30% maior) -->
             <div class="lg:hidden flex-shrink-0 w-44 sm:w-60 pt-0.5">
-              <img 
-                src="/images/raiox-carro-documentalista-consultas-veiculares.png" 
+              <Image 
+                src={raioxImg} 
                 alt="Raio-X da Consulta Veículo Completo — Documentalista" 
                 class="w-full h-auto object-contain drop-shadow-md scale-105"
+                loading="eager"
+                fetchpriority="high"
               />
             </div>
           </div>
 
           <!-- Imagem Raio-X do Carro (Central no Header no Desktop) -->
           <div class="hidden lg:flex flex-1 justify-center items-center py-2 lg:py-0 px-2">
-            <img 
-              src="/images/raiox-carro-documentalista-consultas-veiculares.png" 
+            <Image 
+              src={raioxImg} 
               alt="Raio-X da Consulta Veículo Completo — Documentalista" 
               class="w-full max-w-[480px] h-auto object-contain drop-shadow-md hover:scale-[1.02] transition-transform duration-300"
+              loading="eager"
+              fetchpriority="high"
             />
           </div>
 

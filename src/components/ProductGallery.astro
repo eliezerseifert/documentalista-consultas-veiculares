@@ -1,7 +1,10 @@
 ---
 // ProductGallery.astro — Galeria Estilo E-Commerce para Páginas de Produto
+import { Image } from 'astro:assets';
+import defaultMainImage from '../assets/images/Consulta-veicular.png';
+
 interface Props {
-  mainImage?: string;
+  mainImage?: string | ImageMetadata;
   video1?: string;
   video2?: string;
   pdfUrl?: string;
@@ -9,7 +12,7 @@ interface Props {
 }
 
 const {
-  mainImage = '/images/Consulta-veicular.png',
+  mainImage = defaultMainImage,
   video1 = '/images/Men_discussing_vehicle_history_t%E2%80%A6_20260915190222.mp4',
   video2 = '/images/Men_discussing_vehicle_history_t%E2%80%A6_20260915190222.mp4',
   pdfUrl = '/pdf/consulta-modelo.pdf',
@@ -25,11 +28,13 @@ const {
     <div id="gallery-main-display" class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center relative">
       
       <!-- Imagem Principal (Visível por Padrão) -->
-      <img 
+      <Image 
         id="gallery-main-image"
-        src={mainImage} 
+        src={mainImage as any} 
         alt={`Modelo da ${productTitle}`} 
         class="w-full h-full object-contain object-center transition-opacity duration-300"
+        loading="eager"
+        fetchpriority="high"
       />
 
       <!-- Player de Vídeo (Oculto por Padrão) -->
@@ -70,7 +75,7 @@ const {
       class="gallery-thumb active aspect-square rounded-xl border-2 border-[#3DB5B4] bg-white p-1 overflow-hidden relative hover:opacity-90 transition-all focus:outline-none ring-2 ring-[#3DB5B4]/30"
       id="thumb-0"
     >
-      <img src={mainImage} alt="Preview do Laudo" class="w-full h-full object-cover rounded-lg" />
+      <Image src={mainImage as any} alt="Preview do Laudo" class="w-full h-full object-cover rounded-lg" />
       <span class="absolute bottom-1 right-1 bg-black/60 text-white text-[9px] font-mono-code px-1.5 py-0.5 rounded backdrop-blur-sm">
         LAUDO
       </span>
